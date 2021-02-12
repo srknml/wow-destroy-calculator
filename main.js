@@ -8,7 +8,7 @@ const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 960,
     height: 600,
     webPreferences: {
       nodeIntegration: true,

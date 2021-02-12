@@ -22,7 +22,7 @@ const itemContainer = document.querySelector(".item-list");
 for (i = 0; i < NAME_OF_ITEMS.length; i++) {
   const item = document.createElement("div");
   item.classList.add("item-list-items");
-  itemContainer.appendChild(item)
+  itemContainer.appendChild(item);
   let itemName = document.createElement("div");
   itemName.classList.add("item-name");
   let text = document.createTextNode(NAME_OF_ITEMS[i]);
@@ -30,14 +30,4 @@ for (i = 0; i < NAME_OF_ITEMS.length; i++) {
   item.appendChild(itemName);
   const inputs = document.createElement("input");
   item.appendChild(inputs);
-  
 }
-
-// console.log(containerItem);
-// const inputs = document.createElement("input");
-// const names = document.createElement("div");
-// const nameText = document.createTextNode("DeathBsssdasdlossom");
-// containerItem.appendChild(names);
-// const inputs = document.createElement("input");
-// containerItem.appendChild(inputs);
-// itemContainer.appendChild(containerItem);
