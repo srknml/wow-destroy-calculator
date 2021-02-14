@@ -1,34 +1,29 @@
-const fetch = require("node-fetch");
 const oauth2 = require("simple-oauth2");
+require("dotenv").config();
 const { ClientCredentials } = require("simple-oauth2");
-const region = "eu";
-const realmSlug = "silvermoon";
-const token = "USE6oKD6mxSDJv8kmwjsk3JSjlwKJ2o38z";
+class OAuthClient {
+  constructor(OAuthConfig) {
+    this.client = new ClientCredentials(OAuthConfig);
+    this.token = null;
+  }
 
-const config = {
-  client: {
-    id: "4975e15f885f44bb82093b4a8f225ce8",
-    secret: "u19m2FuFo7NIABzrs0xq3C7mKTFM2pw1",
-  },
-  auth: {
-    tokenHost: process.env.OAUTH_TOKEN_HOST || "https://us.battle.net",
-  },
-};
+  async getToken() {
+    const tokenParams = {
+      scope: null,
+    };
 
- async function run() {
-  const client = new ClientCredentials(config);
+    try {
+      if (this.token === null || this.token.expired()) {
+        this.token = await this.client.getToken(tokenParams);
+      }
 
-  const tokenParams = {
-    scope: null,
-  };
-
-  try {
-    const accessToken = await client.getToken(tokenParams);
-    console.log(accessToken);
-  } catch (error) {
-    console.log("Access Token error", error.message);
+      return this.reduceToken(this.token);
+    } catch (error) {
+      console.log("Access Token error", error.message);
+    }
+  }
+  reduceToken(token) {
+    return token.token.access_token;
   }
 }
-
-run();
-
+module.exports = OAuthClient;

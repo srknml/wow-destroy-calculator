@@ -1,7 +1,7 @@
 const electron = require("electron");
-const fetch = require("isomorphic-fetch");
-const OauthClient = require("./OAuth/client.js");
-const oauth2 = require("simple-oauth2");
+const OauthClient = require("./OAuth/client");
+const DataProvider = require("./Data/data")
+const { OAuthConfig } = require("./OAuth/config");
 
 
 require("electron-reload")(__dirname, {
@@ -33,9 +33,7 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-ipcMain.on("key:input", (err, data) => {
-  console.log(data);
-});
+
 const mainMenuTemplate = [
   {
     label: "Menuss",
@@ -63,9 +61,6 @@ const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
 
-ipcMain.on("key:newWin", () => {
-  createWin();
-});
 
 function createWin() {
   let addWin = new BrowserWindow({
@@ -78,4 +73,11 @@ function createWin() {
     addWin = null;
   });
 }
-OauthClient.run()
+
+
+const oauthClient = new OauthClient (OAuthConfig)
+const dataProvider = new DataProvider (oauthClient)
+
+dataProvider.getConnectedRealmId("a","b")
+
+
