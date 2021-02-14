@@ -31,6 +31,7 @@
   -webkit-align-items: flex-start;
   -ms-flex-align: start;
   align-items: flex-start;
+  
   height: 90vh;
   background-color: rgb(36, 31, 31);
 }
@@ -51,6 +52,7 @@
   flex-direction: column;
   max-width: 220px;
   justify-content: space-between;
+  margin-right: 2px;
 }
 .item-list-title {
   text-align: center;
@@ -71,6 +73,7 @@
   justify-content: space-between;
   background-color: rgb(30, 94, 46);
   height: 30px;
+  margin-bottom: 2px;
 }
 .item-name {
   font-size: 16px;

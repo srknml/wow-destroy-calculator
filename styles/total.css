@@ -12,15 +12,20 @@
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  max-width: 220px;
-  justify-content: space-between;
+  max-width: 200px;
+  justify-content: stretch;
+  margin-right: 2px;
 }
 .total-cost-title {
   text-align: center;
 }
-
+.total-cost-container{
+  /* margin-bottom: 2px; */
+}
 .container-title {
+  align-items: center;
   text-align: center;
+  height: 20px; 
 }
 .total-cost-items {
   display: -ms-flexbox;
@@ -38,8 +43,16 @@
   justify-content: space-between;
   background-color: rgb(30, 94, 46);
   height: 30px;
+  margin-bottom: 2px;
 }
 .item-name {
   font-size: 16px;
   font-weight: 600;
+  background-color: darkolivegreen;
+  height: 20px;
+  margin-left: 5px;
+}
+.item-cost{
+  background-color: rgb(250, 9, 9);
+  margin-right: 5px;
 }

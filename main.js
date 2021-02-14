@@ -1,5 +1,6 @@
 const electron = require("electron");
-
+const fetch = require('isomorphic-fetch');
+const btoa = require('btoa');
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
   electron: require(`${__dirname}/node_modules/electron`),
