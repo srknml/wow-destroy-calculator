@@ -1,8 +1,8 @@
 const electron = require("electron");
 const OauthClient = require("./OAuth/client");
-const DataProvider = require("./Data/data")
+const DataProvider = require("./Data/data");
 const { OAuthConfig } = require("./OAuth/config");
-
+const  {userConfig}  = require("./Data/userconfig");
 
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
@@ -61,7 +61,6 @@ const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
 
-
 function createWin() {
   let addWin = new BrowserWindow({
     width: 480,
@@ -74,10 +73,7 @@ function createWin() {
   });
 }
 
+const oauthClient = new OauthClient(OAuthConfig);
+const dataProvider = new DataProvider(oauthClient, userConfig);
 
-const oauthClient = new OauthClient (OAuthConfig)
-const dataProvider = new DataProvider (oauthClient)
-
-dataProvider.getConnectedRealmId("a","b")
-
-
+dataProvider.getConnectedRealmId("a", "b");
