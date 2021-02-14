@@ -1,6 +1,9 @@
 const electron = require("electron");
-const fetch = require('isomorphic-fetch');
-const btoa = require('btoa');
+const fetch = require("isomorphic-fetch");
+const OauthClient = require("./OAuth/client.js");
+const oauth2 = require("simple-oauth2");
+
+
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
   electron: require(`${__dirname}/node_modules/electron`),
@@ -75,3 +78,4 @@ function createWin() {
     addWin = null;
   });
 }
+OauthClient.run()
