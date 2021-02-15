@@ -5,21 +5,20 @@ class DataProvider {
   constructor(oauthClient, user) {
     this.oauthClient = oauthClient;
     this.user = user;
+    this.BLIZZ_URL_BASE = `https://${this.user.region}.api.blizzard.com`;
+    this.CONNECTED_REALM_URL = `https://${this.user.region}.api.blizzard.com/data/wow/connected-realm/index`;
+    this.BATTLENET_NAMESPACE = `dynamic-${this.user.region}`;
   }
 
   async getConnectedRealmId() {
     const token = await this.oauthClient.getToken();
-    console.log("DataProvider ", token);
-    console.log(this.user.region);
-    console.log(this.user.realm);
-    const BLIZZ_CONNECTED_REALM_INDEX_URL = `https://${this.user.region}.api.blizzard.com/data/wow/connected-realm/index`;
-    const BATTLENET_NAMESPACE = `dynamic-${this.user.region}`;
+    console.log("Token :  ", token);
 
-    var response = await fetch(BLIZZ_CONNECTED_REALM_INDEX_URL, {
+    var response = await fetch(this.CONNECTED_REALM_URL, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
-        "Battlenet-Namespace": BATTLENET_NAMESPACE,
+        "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
       },
     });
     const data = await response.json();
@@ -30,28 +29,52 @@ class DataProvider {
         method: "GET",
         headers: {
           Authorization: "Bearer " + token,
-          "Battlenet-Namespace": BATTLENET_NAMESPACE,
+          "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
         },
       });
       //
       const connectedRealmsData = await realmData.json();
       const realmId = connectedRealmsData.id;
       for (let j = 0; j < connectedRealmsData.realms.length; j++) {
-        console.log("FOR'a Girdi");
         let currSlug = connectedRealmsData.realms[j].slug;
         if (currSlug == this.user.realm) {
+          console.log("ilk func", realmId);
           return realmId;
         }
       }
     }
   }
 
+  async getAuctionHouseResponse() {
+    const token = await this.oauthClient.getToken();
+    const connectedRealmId = await this.getConnectedRealmId();
+    const AH_API_URL =
+      this.BLIZZ_URL_BASE +
+      `/data/wow/connected-realm/${connectedRealmId}/auctions`;
+    const auctionHouseResponse = await fetch(AH_API_URL, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
+      },
+    });
 
+    const auctionHouseData = await auctionHouseResponse.json();
+    const auctionItemList = auctionHouseData.auctions;
 
+    const itemID = 169701;
+    for (let i = 0; i < auctionItemList.length; i++) {
+      let currentAuction = auctionItemList[i];
+      
+      if (currentAuction.item.id == itemID){
+          console.log("Deathblossom Fiyatları : "+ currentAuction.unit_price/10000 + " gold");
+        //   console.log("item Bulundu");
+      }
+      
 
-
-
-  
+      
+    }
+  }
 }
 
 module.exports = DataProvider;

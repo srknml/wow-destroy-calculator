@@ -2,7 +2,7 @@ const electron = require("electron");
 const OauthClient = require("./OAuth/client");
 const DataProvider = require("./Data/data");
 const { OAuthConfig } = require("./OAuth/config");
-const  {userConfig}  = require("./Data/userconfig");
+const { userConfig } = require("./Data/userconfig");
 
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
@@ -76,4 +76,8 @@ function createWin() {
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
-dataProvider.getConnectedRealmId("a", "b");
+async function x() {
+  // await dataProvider.getConnectedRealmId();
+  await dataProvider.getAuctionHouseResponse();
+}
+x();
