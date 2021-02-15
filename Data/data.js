@@ -80,7 +80,7 @@ class DataProvider {
 
     let itemAuctions = {};
     itemIds.forEach((x) => (itemAuctions[x] = []));
-    console.log(itemAuctions[175788]);
+    // console.log(itemAuctions[175788]);
 
     for (let i = 0; i < auctionItemList.length; i++) {
       let currentAuction = auctionItemList[i];
@@ -98,7 +98,16 @@ class DataProvider {
         }
       }
     }
-    console.log(itemAuctions);
+    let currentPrices = {};
+    for (let [itemId, auctions] of Object.entries(itemAuctions)) {
+
+      // Sort ascending
+      auctions.sort(function (a, b) {
+        return a - b;
+      });
+      currentPrices[itemId] = auctions[0];
+    }
+    return currentPrices;
   }
 }
 

@@ -1,6 +1,6 @@
 const userConfig = {
-    region: "eu",
-    realm :"sargeras"
-}
+  region: "eu",
+  realm: "sargeras",
+};
 
-exports.userConfig=userConfig
+exports.userConfig = userConfig;

@@ -7,4 +7,4 @@ const OAuthConfig = {
     tokenHost: process.env.OAUTH_TOKEN_HOST || "https://us.battle.net",
   },
 };
-exports.OAuthConfig = OAuthConfig
+exports.OAuthConfig = OAuthConfig;
