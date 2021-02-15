@@ -77,23 +77,13 @@ function createWin() {
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
-async function updatePrices() {
-  // await dataProvider.getConnectedRealmId();
-  const prices = await dataProvider.getAuctionHouseResponse();
- return prices
-}
-// x();
+//Listens Update Button
+ipcMain.on("updatePrices", async (event) => {
+  const currentPrices = await dataProvider.getAuctionHouseResponse();
+   event.returnValue = currentPrices;
+});
 
-//Receive and reply to synchronous message
-ipcMain.on('helloSync', (event, ...args) => {
-  
-  event.returnValue = 'Hi, sync reply'+ args;
- });
+// ipcMain.on('helloSync', (event, ...args) => {
 
-//Listens Test
-ipcMain.on('TestChannel',async (event)  => {
-   const x = await updatePrices();
-  event.sender.send("TestChannel",x)
-})
-
-
+//   event.returnValue = 'Hi, sync reply'+ args;
+//  });

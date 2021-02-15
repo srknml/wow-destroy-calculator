@@ -1,47 +1,57 @@
-const { ipcMain } = require("electron");
 const electron = require("electron");
 const { ipcRenderer } = electron;
 
-const btn = document.getElementById('test')
-btn.addEventListener('click', () => {
-  ipcRenderer.send('TestChannel')
-})
-ipcRenderer.on('TestChannel', (event,arg) => {
-  console.log(arg)
-})
-//Sync Data
-let reply = ipcRenderer.sendSync('helloSync','a string', 10);
-console.log(reply)
+let currentPrices;
+const btn = document.getElementById("test");
+btn.addEventListener("click", () => {
+   currentPrices = ipcRenderer.sendSync("updatePrices");
+ 
+});
 
-const NAME_OF_ITEMS = [
-  "Death Blossom",
-  "Marrowroot",
-  "Rising Glory",
-  "Vigil's Torch",
-  "Widowbloom",
-  "Nightshade",
-  "Luminous Pigment",
-  "Umbral Pigment",
-  "Tranquil Pigment",
-  "Luminous Ink",
-  "Umbral Ink",
-  "Tranquil Ink",
-  "Aerated Water",
-  "Rune Etched Vial",
+// ipcRenderer.on("updatePrices", (event, args) => {
+//   const currentPrices = args;
+// });
+
+//Sync Data
+const itemData = [
+  { id: 169701, name: "DeathBlossom" },
+  { id: 168589, name: "Marrowroot" },
+  { id: 168586, name: "Rising Glory" },
+  { id: 170554, name: "Vigil's Torch" },
+  { id: 168583, name: "Widowbloom" },
+  { id: 171315, name: "Nightshade" },
+  { id: 173057, name: "Luminous Pigment" },
+  { id: 173056, name: "Umbral Pigment" },
+  { id: 175788, name: "Tranquil Pigment" },
+  { id: 173059, name: "Luminous Ink" },
+  { id: 173058, name: "Umbral Ink" },
+  { id: 175970, name: "Tranquil Ink" },
 ];
+//  currentPrices = ipcRenderer.sendSync("updatePrices");
+
+
+for (let i = 0; i < itemData.length; i++) {
+  itemData[i].price = currentPrices[itemData[i].id];
+}
+
+
 const itemContainer = document.querySelector(".item-list");
 
-for (let i = 0; i < NAME_OF_ITEMS.length; i++) {
+for (let i = 0; i < itemData.length; i++) {
   const item = document.createElement("div");
   item.classList.add("item-list-items");
+  item.id = itemData[i].id;
+
   itemContainer.appendChild(item);
-  let itemName = document.createElement("div");
+  let itemName = document.createElement("span");
   itemName.classList.add("item-name");
-  let text = document.createTextNode(NAME_OF_ITEMS[i]);
+  let text = document.createTextNode(itemData[i].name);
   itemName.appendChild(text);
   item.appendChild(itemName);
-  const inputs = document.createElement("input");
-  item.appendChild(inputs);
+  const price = document.createElement("span");
+  let x = document.createTextNode(itemData[i].price+ " gold");
+  price.appendChild(x);
+  item.appendChild(price);
 }
 const updateBtn = document.createElement("button");
 updateBtn.classList.add("update-btn");
