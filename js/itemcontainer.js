@@ -1,5 +1,17 @@
+const { ipcMain } = require("electron");
 const electron = require("electron");
 const { ipcRenderer } = electron;
+
+const btn = document.getElementById('test')
+btn.addEventListener('click', () => {
+  ipcRenderer.send('TestChannel')
+})
+ipcRenderer.on('TestChannel', (event,arg) => {
+  console.log(arg)
+})
+//Sync Data
+let reply = ipcRenderer.sendSync('helloSync','a string', 10);
+console.log(reply)
 
 const NAME_OF_ITEMS = [
   "Death Blossom",
@@ -32,7 +44,6 @@ for (let i = 0; i < NAME_OF_ITEMS.length; i++) {
   item.appendChild(inputs);
 }
 const updateBtn = document.createElement("button");
-updateBtn.classList.add("update-btn")
-updateBtn.appendChild(document.createTextNode("Update Prices"))
-itemContainer.appendChild(updateBtn)
-console.log("asd")
+updateBtn.classList.add("update-btn");
+updateBtn.appendChild(document.createTextNode("Update Prices"));
+itemContainer.appendChild(updateBtn);

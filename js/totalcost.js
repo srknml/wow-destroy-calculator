@@ -1,7 +1,11 @@
-const TOTAL_COST_SECTIONS = ["Luminous Ink", "Umbral Ink", "Tranquil Ink", "Total Cost"];
+const TOTAL_COST_SECTIONS = [
+  "Luminous Ink",
+  "Umbral Ink",
+  "Tranquil Ink",
+  "Total Cost",
+];
 
 const totalContainer = document.querySelector(".total-cost");
-
 
 for (let i = 0; i < 3; i++) {
   const container = document.createElement("div");
@@ -24,11 +28,10 @@ for (let i = 0; i < 3; i++) {
 
     const itemCost = document.createElement("div");
     itemCost.classList.add("item-cost");
-    itemCost.appendChild(document.createTextNode("COSTS"))
+    itemCost.appendChild(document.createTextNode("COSTS"));
     items.appendChild(itemCost);
     container.appendChild(items);
   }
 
   totalContainer.appendChild(container);
 }
-console.log("totalcost");

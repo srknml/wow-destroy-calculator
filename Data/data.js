@@ -5,6 +5,7 @@ class DataProvider {
   constructor(oauthClient, user) {
     this.oauthClient = oauthClient;
     this.user = user;
+    this.currentPrices = null;
     this.BLIZZ_URL_BASE = `https://${this.user.region}.api.blizzard.com`;
     this.CONNECTED_REALM_URL = `https://${this.user.region}.api.blizzard.com/data/wow/connected-realm/index`;
     this.BATTLENET_NAMESPACE = `dynamic-${this.user.region}`;
@@ -80,7 +81,6 @@ class DataProvider {
 
     let itemAuctions = {};
     itemIds.forEach((x) => (itemAuctions[x] = []));
-    // console.log(itemAuctions[175788]);
 
     for (let i = 0; i < auctionItemList.length; i++) {
       let currentAuction = auctionItemList[i];
@@ -100,15 +100,19 @@ class DataProvider {
     }
     let currentPrices = {};
     for (let [itemId, auctions] of Object.entries(itemAuctions)) {
-
       // Sort ascending
       auctions.sort(function (a, b) {
         return a - b;
       });
       currentPrices[itemId] = auctions[0];
     }
-    return currentPrices;
+
+    return (this.currentPrices = currentPrices);
   }
+
+  // _setCurrentPrices(currentPrices) {
+  //  return  this.currentPrices = currentPrices
+  // }
 }
 
 module.exports = DataProvider;

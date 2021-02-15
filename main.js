@@ -3,6 +3,7 @@ const OauthClient = require("./OAuth/client");
 const DataProvider = require("./Data/data");
 const { OAuthConfig } = require("./OAuth/config");
 const { userConfig } = require("./Data/userconfig");
+const { ipcRenderer } = require("electron");
 
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
@@ -76,8 +77,23 @@ function createWin() {
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
-async function x() {
+async function updatePrices() {
   // await dataProvider.getConnectedRealmId();
-  await dataProvider.getAuctionHouseResponse();
+  const prices = await dataProvider.getAuctionHouseResponse();
+ return prices
 }
-x();
+// x();
+
+//Receive and reply to synchronous message
+ipcMain.on('helloSync', (event, ...args) => {
+  
+  event.returnValue = 'Hi, sync reply'+ args;
+ });
+
+//Listens Test
+ipcMain.on('TestChannel',async (event)  => {
+   const x = await updatePrices();
+  event.sender.send("TestChannel",x)
+})
+
+
