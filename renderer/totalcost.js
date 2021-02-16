@@ -22,7 +22,7 @@ for (let i = 0; i < 3; i++) {
     items.classList.add("total-cost-items");
 
     const itemName = document.createElement("div");
-    itemName.classList.add("item-name");
+    itemName.classList.add("total-item-name");
     itemName.appendChild(document.createTextNode(TOTAL_COST_SECTIONS[i]));
     items.appendChild(itemName);
 

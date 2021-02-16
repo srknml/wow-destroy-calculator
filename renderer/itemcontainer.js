@@ -52,12 +52,12 @@ function createItemsLayout() {
     item.id = itemData[i].id;
 
     itemContainer.appendChild(item);
-    let itemName = document.createElement("span");
+    let itemName = document.createElement("div");
     itemName.classList.add("item-name");
     let text = document.createTextNode(itemData[i].name);
     itemName.appendChild(text);
     item.appendChild(itemName);
-    const price = document.createElement("span");
+    const price = document.createElement("div");
     price.classList.add("item-price");
 
     item.appendChild(price);
