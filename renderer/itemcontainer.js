@@ -14,6 +14,8 @@ const itemData = [
   { id: 173059, name: "Luminous Ink" },
   { id: 173058, name: "Umbral Ink" },
   { id: 175970, name: "Tranquil Ink" },
+  { id: 1, name: "Aerated Water", price: "0.5" },
+  { id: 2, name: "Rune Etched Vial", price: "1" },
 ];
 
 const itemContainer = document.querySelector(".item-list");
@@ -21,7 +23,6 @@ const itemContainer = document.querySelector(".item-list");
 function handleUpdate() {
   const btn = document.querySelector("#updatePrices");
   btn.addEventListener("click", async () => {
-    console.log("veriler alınıyor.");
     await getPrices();
     displayPrices();
   });
@@ -33,7 +34,7 @@ async function getPrices() {
 }
 
 function setPrices(prices) {
-  for (let i = 0; i < itemData.length; i++) {
+  for (let i = 0; i < itemData.length - 2; i++) {
     itemData[i].price = prices[itemData[i].id];
   }
 }
@@ -45,6 +46,7 @@ function displayPrices() {
     }
   }
 }
+//Vendorları ayrı oluştur.
 function createItemsLayout() {
   for (let i = 0; i < itemData.length; i++) {
     const item = document.createElement("div");
@@ -59,9 +61,13 @@ function createItemsLayout() {
     item.appendChild(itemName);
     const price = document.createElement("div");
     price.classList.add("item-price");
+    if (itemData[i].hasOwnProperty("price")) {
+      price.appendChild(document.createTextNode(itemData[i].price));
+    }
 
     item.appendChild(price);
   }
+
   const updateBtn = document.createElement("button");
   updateBtn.classList.add("update-btn");
   updateBtn.id = "updatePrices";
