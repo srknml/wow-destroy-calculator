@@ -3,7 +3,6 @@ const OauthClient = require("./OAuth/client");
 const DataProvider = require("./Data/data");
 const { OAuthConfig } = require("./OAuth/config");
 const { userConfig } = require("./Data/userconfig");
-const { ipcRenderer } = require("electron");
 
 require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
@@ -79,11 +78,7 @@ const dataProvider = new DataProvider(oauthClient, userConfig);
 
 //Listens Update Button
 ipcMain.on("updatePrices", async (event) => {
+  await dataProvider.getConnectedRealmId(); //At the same time it gets token
   const currentPrices = await dataProvider.getAuctionHouseResponse();
-   event.returnValue = currentPrices;
+  event.returnValue = currentPrices;
 });
-
-// ipcMain.on('helloSync', (event, ...args) => {
-
-//   event.returnValue = 'Hi, sync reply'+ args;
-//  });

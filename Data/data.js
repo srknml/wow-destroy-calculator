@@ -5,6 +5,8 @@ class DataProvider {
   constructor(oauthClient, user) {
     this.oauthClient = oauthClient;
     this.user = user;
+    this.token = null;
+    this.realmId = null;
     this.currentPrices = null;
     this.BLIZZ_URL_BASE = `https://${this.user.region}.api.blizzard.com`;
     this.CONNECTED_REALM_URL = `https://${this.user.region}.api.blizzard.com/data/wow/connected-realm/index`;
@@ -12,13 +14,12 @@ class DataProvider {
   }
 
   async getConnectedRealmId() {
-    const token = await this.oauthClient.getToken();
-    console.log("Token :  ", token);
+    this.token = await this.oauthClient.getToken();
 
-    var response = await fetch(this.CONNECTED_REALM_URL, {
+    const response = await fetch(this.CONNECTED_REALM_URL, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + this.token,
         "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
       },
     });
@@ -29,7 +30,7 @@ class DataProvider {
       const realmData = await fetch(realmList[i].href, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + this.token,
           "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
         },
       });
@@ -39,23 +40,20 @@ class DataProvider {
       for (let j = 0; j < connectedRealmsData.realms.length; j++) {
         let currSlug = connectedRealmsData.realms[j].slug;
         if (currSlug == this.user.realm) {
-          console.log("ilk func", realmId);
-          return realmId;
+          return (this.realmId = realmId);
         }
       }
     }
   }
 
   async getAuctionHouseResponse() {
-    const token = await this.oauthClient.getToken();
-    const connectedRealmId = await this.getConnectedRealmId();
     const AH_API_URL =
       this.BLIZZ_URL_BASE +
-      `/data/wow/connected-realm/${connectedRealmId}/auctions`;
+      `/data/wow/connected-realm/${this.realmId}/auctions`;
     const auctionHouseResponse = await fetch(AH_API_URL, {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + this.token,
         "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
       },
     });
@@ -109,10 +107,6 @@ class DataProvider {
 
     return (this.currentPrices = currentPrices);
   }
-
-  // _setCurrentPrices(currentPrices) {
-  //  return  this.currentPrices = currentPrices
-  // }
 }
 
 module.exports = DataProvider;

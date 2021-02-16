@@ -18,6 +18,15 @@ const itemData = [
 
 const itemContainer = document.querySelector(".item-list");
 
+function handleUpdate() {
+  const btn = document.querySelector("#updatePrices");
+  btn.addEventListener("click", async () => {
+    console.log("veriler alınıyor.");
+    await getPrices();
+    displayPrices();
+  });
+}
+
 async function getPrices() {
   const prices = await ipcRenderer.sendSync("updatePrices");
   setPrices(prices);
@@ -32,10 +41,8 @@ function displayPrices() {
   const pricesSpans = document.querySelectorAll(".item-list-items");
   for (let i = 0; i < pricesSpans.length; i++) {
     if (pricesSpans[i].id == itemData[i].id) {
-        pricesSpans[i].lastElementChild.innerText = itemData[i].price;
+      pricesSpans[i].lastElementChild.innerText = itemData[i].price;
     }
-    
-    // console.log(pricesSpans[i].id, pricesSpans[i].lastElementChild.innerText);
   }
 }
 function createItemsLayout() {
@@ -63,9 +70,10 @@ function createItemsLayout() {
 }
 
 async function __init__() {
-  await createItemsLayout();
-  await getPrices();
-  await displayPrices();
+  createItemsLayout();
+  // await getPrices();
+  // await displayPrices();
+  handleUpdate();
 }
 
 __init__();
