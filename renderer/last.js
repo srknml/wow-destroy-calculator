@@ -7,7 +7,7 @@ const itemNames = ["Luminous ", "Umbral ", "Tranquil "];
 function createLayout(elem, node) {
   for (let i = 0; i < itemNames.length; i++) {
     const item = document.createElement("div");
-    item.classList.add("item-list-items");
+    item.classList.add("items");
     const itemName = document.createElement("span");
     itemName.classList.add("item-name");
     if (elem !== shopping) {

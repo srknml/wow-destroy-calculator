@@ -18,7 +18,7 @@ const itemData = [
   { id: 2, name: "Rune Etched Vial", price: "1" },
 ];
 
-const itemContainer = document.querySelector(".item-list");
+const itemContainer = document.querySelectorAll(".container-item")[0];
 
 function handleUpdate() {
   const btn = document.querySelector("#updatePrices");
@@ -39,7 +39,7 @@ function setPrices(prices) {
   }
 }
 function displayPrices() {
-  const pricesSpans = document.querySelectorAll(".item-list-items");
+  const pricesSpans = document.querySelectorAll(".items");
   for (let i = 0; i < pricesSpans.length; i++) {
     if (pricesSpans[i].id == itemData[i].id) {
       pricesSpans[i].lastElementChild.innerText = itemData[i].price;
@@ -50,7 +50,7 @@ function displayPrices() {
 function createItemsLayout() {
   for (let i = 0; i < itemData.length; i++) {
     const item = document.createElement("div");
-    item.classList.add("item-list-items");
+    item.classList.add("items");
     item.id = itemData[i].id;
 
     itemContainer.appendChild(item);
