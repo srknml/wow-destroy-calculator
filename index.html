@@ -8,7 +8,7 @@
       content="script-src 'self' 'unsafe-inline';"
     />
     <link rel="stylesheet" href="./styles/styles.css" />
-    <link rel="stylesheet" href="./styles/total.css">
+    <link rel="stylesheet" href="./styles/total.css" />
   </head>
   <body class="wrapper">
     <header class="header">
@@ -21,27 +21,32 @@
       </nav>
     </header>
     <main class="container">
-      <div  class="item-list">
-        <h2  class="item-list-title">
-          Item List
-        </h2>
+      <div class="item-list">
+        <h2 class="item-list-title">Item List</h2>
       </div>
-        <div       class="total-cost">
-          <h2  class="total-cost-title">Total Ink Costs</h2>
-         
+      <div class="total-cost">
+        <h2 class="total-cost-title">Total Ink Costs</h2>
+      </div>
+
+      <div class="item-list">
+        <div class="required-section">
+          <h2 class="item-list-title">Required Pigments</h2>
         </div>
+        <div class="shopping-section">
+          <h2 class="total-cost-title">Shopping List (Milling)</h2>
 
-      <div class="total-required">
-
-        <div class="required">
-          <h1 class="required-title">Required Pigments</h1>
-
-          
         </div>
-     
+        <div class="expected-pigments">
+          <h1 class="total-cost-title">Expected Pigments</h1>
+        </div>
+        <div class="extraneous-pigments">
+          <h1 class="total-cost-title">Extraneous Pigments</h1>
+        </div>
+       
+      </div>
     </main>
     <script src="./renderer/itemcontainer.js"></script>
     <script src="./renderer/totalcost.js"></script>
-   
+    <script src="./renderer/last.js"></script>
   </body>
 </html>
