@@ -23,13 +23,13 @@
   background-color: #16171a;
 }
 .total-cost-container {
-  margin: 2px 0;
   background-color: #1a1a1a;
 }
 .container-title {
   text-align: center;
   color: rgb(255, 255, 255);
   background-color: #171b1b;
+  padding: 6px 0px;
 }
 .total-cost-items {
   display: -ms-flexbox;
