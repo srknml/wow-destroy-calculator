@@ -57,7 +57,6 @@ class DataProvider {
         "Battlenet-Namespace": this.BATTLENET_NAMESPACE,
       },
     });
-
     const auctionHouseData = await auctionHouseResponse.json();
     const auctionItemList = auctionHouseData.auctions;
 
@@ -96,6 +95,8 @@ class DataProvider {
         }
       }
     }
+    for (let i = 0; i < itemAuctions[171315].length; i++) {
+    }
     let currentPrices = {};
     for (let [itemId, auctions] of Object.entries(itemAuctions)) {
       // Sort ascending
@@ -104,7 +105,6 @@ class DataProvider {
       });
       currentPrices[itemId] = auctions[0];
     }
-
     return (this.currentPrices = currentPrices);
   }
 }

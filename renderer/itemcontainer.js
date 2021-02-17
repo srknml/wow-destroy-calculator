@@ -64,7 +64,6 @@ function createItemsLayout() {
     if (itemData[i].hasOwnProperty("price")) {
       price.appendChild(document.createTextNode(itemData[i].price));
     }
-
     item.appendChild(price);
   }
 
