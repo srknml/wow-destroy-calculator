@@ -28,6 +28,7 @@ for (let i = 0; i < 3; i++) {
 
     const itemCost = document.createElement("div");
     itemCost.classList.add("item-price");
+    itemCost.id = "ida"
     itemCost.appendChild(document.createTextNode("COSTS"));
     items.appendChild(itemCost);
     container.appendChild(items);

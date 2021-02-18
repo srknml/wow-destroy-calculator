@@ -40,7 +40,8 @@ function setPrices(prices) {
 }
 function displayPrices() {
   const pricesSpans = document.querySelectorAll(".items");
-  for (let i = 0; i < pricesSpans.length; i++) {
+  console.log(pricesSpans);
+  for (let i = 0; i < itemData.length-2; i++) {
     if (pricesSpans[i].id == itemData[i].id) {
       pricesSpans[i].lastElementChild.innerText = itemData[i].price;
     }
