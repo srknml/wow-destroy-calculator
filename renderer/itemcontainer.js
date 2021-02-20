@@ -29,7 +29,7 @@ function handleUpdate() {
 }
 
 async function getPrices() {
-  const prices = await ipcRenderer.sendSync("updatePrices");
+  const prices = await ipcRenderer.sendSync("Prices");
   setPrices(prices);
 }
 
@@ -40,8 +40,7 @@ function setPrices(prices) {
 }
 function displayPrices() {
   const pricesSpans = document.querySelectorAll(".items");
-  console.log(pricesSpans);
-  for (let i = 0; i < itemData.length-2; i++) {
+  for (let i = 0; i < itemData.length - 2; i++) {
     if (pricesSpans[i].id == itemData[i].id) {
       pricesSpans[i].lastElementChild.innerText = itemData[i].price;
     }
@@ -53,15 +52,18 @@ function createItemsLayout() {
     const item = document.createElement("div");
     item.classList.add("items");
     item.id = itemData[i].id;
-
     itemContainer.appendChild(item);
+
     let itemName = document.createElement("div");
     itemName.classList.add("item-name");
+    itemName.id = itemData[i].id + "n";
     let text = document.createTextNode(itemData[i].name);
     itemName.appendChild(text);
     item.appendChild(itemName);
+
     const price = document.createElement("div");
     price.classList.add("item-price");
+    price.id = itemData[i].id + "p";
     if (itemData[i].hasOwnProperty("price")) {
       price.appendChild(document.createTextNode(itemData[i].price));
     }
@@ -76,9 +78,10 @@ function createItemsLayout() {
 }
 
 async function __init__() {
+  console.log("init çalışıyor.");
   createItemsLayout();
-  // await getPrices();
-  // await displayPrices();
+  await getPrices();
+  displayPrices();
   handleUpdate();
 }
 

@@ -77,7 +77,7 @@ const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
 //Listens Update Button
-ipcMain.on("updatePrices", async (event) => {
+ipcMain.on("Prices", async (event) => {
   await dataProvider.getConnectedRealmId(); //At the same time it gets token
   const currentPrices = await dataProvider.getAuctionHouseResponse();
   event.returnValue = currentPrices;
