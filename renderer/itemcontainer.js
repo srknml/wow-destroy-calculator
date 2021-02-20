@@ -56,14 +56,14 @@ function createItemsLayout() {
 
     let itemName = document.createElement("div");
     itemName.classList.add("item-name");
-    itemName.id = itemData[i].id + "n";
+    itemName.id = "i-"+ itemData[i].id + "n";
     let text = document.createTextNode(itemData[i].name);
     itemName.appendChild(text);
     item.appendChild(itemName);
 
     const price = document.createElement("div");
     price.classList.add("item-price");
-    price.id = itemData[i].id + "p";
+    price.id ="i-"+ itemData[i].id + "p";
     if (itemData[i].hasOwnProperty("price")) {
       price.appendChild(document.createTextNode(itemData[i].price));
     }

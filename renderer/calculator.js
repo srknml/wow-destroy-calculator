@@ -1,16 +1,10 @@
 const DeathRates = [0.15, 0.14, 0.005];
-const MarrowRates = [0.91, 0.204, 0.004];
+const MarrowRates = [0.091, 0.204, 0.004];
 const RisingRates = [0.202, 0.92, 0.004];
 const VigilRates = [0.205, 0.097, 0.004];
 const WidowRates = [0.096, 0.194, 0.005];
 const NightRates = [0.232, 0.263, 0.305];
 console.log("calculator çalışıyor");
-/**
- * Herbler için 1. index
- * Pigmentler için 2. index
- * Herb Sırası Death-Marrow-Rising-Vigil-Widow-Night
- * Pigment Sırası Lum-Umb-Tra
- **/
 
 const Rates = [];
 
@@ -21,18 +15,19 @@ Rates.push(VigilRates);
 Rates.push(WidowRates);
 Rates.push(NightRates);
 
-const goldperPigment = {};
+const LIST_OF_GOLD_PER_PIGMENTS = [];
 
 for (let i = 0; i < 6; i++) {
+  const Herb = {};
   const name = itemData[i].name;
   const price = itemData[i].price;
-  goldperPigment[name] = [];
+  const id = itemData[i].id;
+  Herb[name] = [];
   for (let j = 0; j < Rates[i].length; j++) {
     const rate = Rates[i][j];
     let GoldPigment = (1 / rate) * price;
-    goldperPigment[name].push(GoldPigment);
+    Herb[name].push(GoldPigment);
   }
+  LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
 }
-
-console.log(goldperPigment);
-//Rates'i içindeki arrayleri objeye çevirmeyi düşün
+console.log(LIST_OF_GOLD_PER_PIGMENTS);
