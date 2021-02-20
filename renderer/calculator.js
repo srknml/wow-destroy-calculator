@@ -22,12 +22,23 @@ for (let i = 0; i < 6; i++) {
   const name = itemData[i].name;
   const price = itemData[i].price;
   const id = itemData[i].id;
-  Herb[name] = [];
+  Herb[id] = [];
   for (let j = 0; j < Rates[i].length; j++) {
     const rate = Rates[i][j];
     let GoldPigment = (1 / rate) * price;
-    Herb[name].push(GoldPigment);
+    Herb[id].push(GoldPigment);
   }
   LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
 }
 console.log(LIST_OF_GOLD_PER_PIGMENTS);
+
+//************************************* */
+const minPrices = [];
+for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
+  const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
+  for (let i = 0; i < pigment.length; i++) {
+    const minCost = Math.min(...pigment);
+    minPrices.push(minCost)
+    console.log(minCost);
+  }
+}
