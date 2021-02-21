@@ -30,7 +30,6 @@ for (let i = 0; i < 6; i++) {
   }
   LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
 }
-console.log(LIST_OF_GOLD_PER_PIGMENTS);
 
 //************************************* */
 const minPrices = [];
@@ -38,7 +37,14 @@ for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
   const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
   for (let i = 0; i < pigment.length; i++) {
     const minCost = Math.min(...pigment);
-    minPrices.push(minCost)
-    console.log(minCost);
+    minPrices.push(minCost);
   }
 }
+
+
+// for (let i = 0; i < requires.length; i++) {
+//   requires[i].addEventListener("change", () => {
+//     console.log("Değişiyor");
+//   })
+  
+// }
