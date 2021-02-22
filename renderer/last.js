@@ -2,29 +2,27 @@ const reqs = document.querySelector(".required-section");
 const expected = document.querySelector(".expected-pigments");
 const extra = document.querySelector(".extraneous-pigments");
 const shopping = document.querySelector(".shopping-section");
-const itemNames = ["Luminous ", "Umbral ", "Tranquil "];
 
 function createLayout(elem, node) {
-  for (let i = 0; i < itemNames.length; i++) {
+  for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
     item.classList.add("items");
     const itemName = document.createElement("span");
     itemName.classList.add("item-name");
     if (elem !== shopping) {
-      itemName.appendChild(document.createTextNode(itemData[i+9].name));
+      itemName.appendChild(document.createTextNode(itemData[i + 9].name));
       item.appendChild(itemName);
-      if(elem === reqs){
-        item.id = "r-" + itemData[i+9].id
-        
+      if (elem === reqs) {
+        item.id = "r-" + itemData[i + 9].id;
       }
     } else {
       itemName.appendChild(document.createTextNode("Test"));
       item.appendChild(itemName);
     }
     const span = document.createElement(node);
-    if( elem === reqs){
-      span.type = "text"
-      span.value = 0
+    if (elem === reqs) {
+      span.type = "text";
+      span.value = 0;
     }
     item.appendChild(span);
 
