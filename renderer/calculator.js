@@ -66,39 +66,73 @@ const requires = document.querySelectorAll(
   ".required-section > .items > input "
 );
 
-const shoppingSec = document.querySelectorAll(".shopping-section > .items");
+const shoppingSec = document.querySelectorAll(
+  ".shopping-section > .items > .item-name"
+);
+
+
+
+
 
 // Amount ve Cost Hesaplamaları Yapılacak
+
 function shop(i) {
-  let xx = [];
   const currents = findMinCost();
-  xx.push(currents[0].lum);
-  xx.push(currents[1].umb);
-  xx.push(currents[2].tra);
+  console.log(currents);
+
+  //TERS MATRIS GEREKIYOR:..............
+  
+  //Lum Pigment için
+  if(i === 0){
+    const gerekenHerbForLum = itemData.find((herb) => herb.id === currents[i].id).name
+    const amountOfHerb =  currents[i].lum /itemData.find((herb) => herb.id === currents[i].id).price 
+    const costAll = amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price
+    console.log(gerekenHerbForLum,amountOfHerb,costAll);
+  }
+  else if(i === 1){
+    
+  //Umbra Pigment için
+    const gerekenHerbForUmb = itemData.find((herb) => herb.id === currents[i].id).name
+    const amountOfHerbforUmb =  currents[i].umb /itemData.find((herb) => herb.id === currents[i].id).price 
+    const costAllforUmb = amountOfHerbforUmb * itemData.find((herb) => herb.id === currents[i].id).price
+    console.log(gerekenHerbForUmb, amountOfHerbforUmb,costAllforUmb);
+  }
+  else {
+      //Tranquil için
+  const traNeeded = itemData.find((herb) => herb.id === currents[i].id).name
+  const AmountforTra = currents[i].tra /itemData.find((herb) => herb.id === currents[i].id).price
+  const costAllforTra = AmountforTra * itemData.find((herb) => herb.id === currents[i].id).price
+  console.log(traNeeded,AmountforTra,costAllforTra);
+  }
+
+
 
   const requiredValue = requires[i].value;
   if (requiredValue > 0) {
     const herbName = itemData.find((herb) => herb.id === currents[i].id).name;
-    const herbAmount =
-      xx[i] / itemData.find((herb) => herb.id === currents[i].id).price;
 
-    if (shoppingSec[1].childNodes[0].innerText === "Test") {
-      shoppingSec[1].childNodes[0].innerText = herbName;
+    if (shoppingSec[1].innerText === "Test") {
+      shoppingSec[1].innerText = herbName;
     }
 
-    if (herbName !== shoppingSec[1].childNodes[0].innerText) {
-      shoppingSec[2].childNodes[0].innerText = herbName;
+    if (herbName !== shoppingSec[1].innerText) {
+      shoppingSec[2].innerText = herbName;
     }
-  } else {
-    shoppingSec[i + 1].childNodes[i].innerText === "Test";
   }
 }
+
+
+
+
+
+
+
 
 //Total Sections
 const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
-function asd() {
+function millingCost() {
   let xx = [];
   const currents = findMinCost();
   xx.push(currents[0].lum);
@@ -142,7 +176,8 @@ for (let i = 0; i < requires.length; i++) {
   requires[i].addEventListener("change", () => {
     setTotalCosts(t2);
     setTotalCosts(t3);
-    asd();
+    millingCost();
     shop(i);
   });
 }
+
