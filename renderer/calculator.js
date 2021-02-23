@@ -36,14 +36,14 @@ const costsForAllPigments = [];
 for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
   const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
   const obj = { id: itemData[i].id };
-  // console.log(pigment);
+  const obj2 = { id: itemData[i].id };
+
   obj.lum = pigment[0];
   obj.umb = pigment[1];
   obj.tra = pigment[2];
   costsForAllPigments.push(obj);
 }
-
-function findMinCost(a) {
+function findMinCost() {
   let minCostsPerPigment = [];
   let minCostForLum = costsForAllPigments.reduce((prev, curr) =>
     prev.lum < curr.lum ? prev : curr
@@ -54,31 +54,61 @@ function findMinCost(a) {
   let minCostForTra = costsForAllPigments.reduce((prev, curr) =>
     prev.tra < curr.tra ? prev : curr
   );
-  minCostsPerPigment.push(minCostForLum.lum);
-  minCostsPerPigment.push(minCostForUmb.umb);
-  minCostsPerPigment.push(minCostForTra.tra);
+
+  minCostsPerPigment.push(minCostForLum);
+  minCostsPerPigment.push(minCostForUmb);
+  minCostsPerPigment.push(minCostForTra);
 
   return minCostsPerPigment;
 }
-console.log(findMinCost());
 
 const requires = document.querySelectorAll(
   ".required-section > .items > input "
 );
 
-//Required edilen ink a göre göstereceğiz...
+const shoppingSec = document.querySelectorAll(".shopping-section > .items");
+
+// Amount ve Cost Hesaplamaları Yapılacak
+function shop(i) {
+  let xx = [];
+  const currents = findMinCost();
+  xx.push(currents[0].lum);
+  xx.push(currents[1].umb);
+  xx.push(currents[2].tra);
+
+  const requiredValue = requires[i].value;
+  if (requiredValue > 0) {
+    const herbName = itemData.find((herb) => herb.id === currents[i].id).name;
+    const herbAmount =
+      xx[i] / itemData.find((herb) => herb.id === currents[i].id).price;
+
+    if (shoppingSec[1].childNodes[0].innerText === "Test") {
+      shoppingSec[1].childNodes[0].innerText = herbName;
+    }
+
+    if (herbName !== shoppingSec[1].childNodes[0].innerText) {
+      shoppingSec[2].childNodes[0].innerText = herbName;
+    }
+  } else {
+    shoppingSec[i + 1].childNodes[i].innerText === "Test";
+  }
+}
+
+//Total Sections
 const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
 function asd() {
+  let xx = [];
   const currents = findMinCost();
+  xx.push(currents[0].lum);
+  xx.push(currents[1].umb);
+  xx.push(currents[2].tra);
   let total = 0;
   for (let i = 0; i < t1.length - 1; i++) {
     const requiredValue = requires[i].value;
     t1[i].innerText = Number(
-      ((parseInt(currents[i] * 100 + 1.5 * 100) / 100) * requiredValue).toFixed(
-        2
-      )
+      ((parseInt(xx[i] * 100 + 1.5 * 100) / 100) * requiredValue).toFixed(2)
     );
     total += parseInt(t1[i].innerText * 100) / 100;
   }
@@ -113,5 +143,6 @@ for (let i = 0; i < requires.length; i++) {
     setTotalCosts(t2);
     setTotalCosts(t3);
     asd();
+    shop(i);
   });
 }
