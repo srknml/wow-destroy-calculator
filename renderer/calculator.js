@@ -69,6 +69,21 @@ const shoppingSec = document.querySelectorAll(
   ".shopping-section > .items > .item-name"
 );
 
+async function uniqued(marr) {
+  var carr = [];
+    var rarr = [];
+    var j = -1;
+
+    for(var i = 0, l = marr.length; i < l; i++){
+        if(carr[marr[i][1]] !== true){
+            carr[marr[i][1]] = true;
+            rarr[++j] = marr[i];
+        }
+    }
+
+    return rarr;
+}
+
 // Amount ve Cost Hesaplamaları Yapılacak
 let herbTypes = new Set();
 const twoDArr = [];
@@ -142,40 +157,44 @@ function shop(i) {
     ]);
   }
   //Gereken Herb Tipi Sayısını Bul ve miktarları
-  const y = [[10], [1]];
+
   //2D arrayi Herb id sine göre sırala              //+++++
 
   twoDArr.sort(function (a, b) {
-    if (b[2] === a[2]) {
-    }
     return b[3] - a[3];
   });
-  // twoDArr.splice(2,1)     //BUG
+
+  // twoDArr.splice(2, 1); //BUG  Duplicate Aranacak
   console.log(twoDArr);
+  const aqwe = uniqued(twoDArr);
+
+  console.log(aqwe);
+  const y = [[twoDArr[0][1]], [twoDArr[1][1]]]; //For ile Atabiliriz.
+
   /************************************************************ */
   /************************************************************ */
   //Rateslerin Çarpımına göre ters Matrisini Al+++++++++
-  const invertedRates = matrix_invert([
-    [NightRates[2], DeathRates[2]],
-    [NightRates[1], DeathRates[1]],
-  ]);
 
   let axx = [];
   for (let i = 0; i < twoDArr.length; i++) {
     let id = twoDArr[i][2];
     Rates.forEach((item, ind) => {
       if (item[id] !== undefined) {
-        axx.push(item[id]);
+        axx.push([item[id][2], item[id][1]]);
+        // axx.push();
       }
     });
   }
-  console.log(axx);
+  let transposedRates = axx[0].map((_, colIndex) =>
+    axx.map((row) => row[colIndex])
+  );
+  // console.log(transposedRates);
   /*********************************************************** */
   /*********************************************************** */
-
+  const invertedRates = matrix_invert(transposedRates);
   const iki = multiplyMatrices(invertedRates, y);
 
-  console.log(iki); // Last Herb Amount
+  // console.log(iki); // Last Herb Amount
 
   if (requiredValue > 0) {
     const herbName = itemData.find((herb) => herb.id === currents[i].id).name;
