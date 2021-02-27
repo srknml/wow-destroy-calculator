@@ -69,19 +69,19 @@ const shoppingSec = document.querySelectorAll(
   ".shopping-section > .items > .item-name"
 );
 
-async function uniqued(marr) {
+function uniqued(marr) {
   var carr = [];
-    var rarr = [];
-    var j = -1;
+  var rarr = [];
+  var j = -1;
 
-    for(var i = 0, l = marr.length; i < l; i++){
-        if(carr[marr[i][1]] !== true){
-            carr[marr[i][1]] = true;
-            rarr[++j] = marr[i];
-        }
+  for (var i = 0, l = marr.length; i < l; i++) {
+    if (carr[marr[i][1]] !== true) {
+      carr[marr[i][1]] = true;
+      rarr[++j] = marr[i];
     }
+  }
 
-    return rarr;
+  return rarr;
 }
 
 // Amount ve Cost Hesaplamaları Yapılacak
@@ -96,92 +96,74 @@ function shop(i) {
   //Lum Pigment için
   if (i === 0) {
     //herbin rateini alıcaz
-    const gerekenHerbForLum = itemData.find(
-      (herb) => herb.id === currents[i].id
-    ).id;
+    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
       (currents[i].lum /
         itemData.find((herb) => herb.id === currents[i].id).price) *
       requiredValue;
-    const costAll =
+    const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
     // console.log(gerekenHerbForLum,amountOfHerb,costAll);
-    herbTypes.add(gerekenHerbForLum);
-    twoDArr.push([
-      "Lum",
-      requiredValue,
-      gerekenHerbForLum,
-      amountOfHerb,
-      costAll,
-    ]);
+    herbTypes.add(herbID);
+    twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   } else if (i === 1) {
     //herbin rateini alıcaz
     //Umbra Pigment için
-    const gerekenHerbForUmb = itemData.find(
-      (herb) => herb.id === currents[i].id
-    ).id;
-    const amountOfHerbforUmb =
+    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
+    const amountOfHerb =
       (currents[i].umb /
         itemData.find((herb) => herb.id === currents[i].id).price) *
       requiredValue;
-    const costAllforUmb =
-      amountOfHerbforUmb *
-      itemData.find((herb) => herb.id === currents[i].id).price;
+    const totalAmount =
+      amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
     // console.log(gerekenHerbForUmb, amountOfHerbforUmb,costAllforUmb);
-    herbTypes.add(gerekenHerbForUmb);
-    twoDArr.push([
-      "Umbra",
-      requiredValue,
-      gerekenHerbForUmb,
-      amountOfHerbforUmb,
-      costAllforUmb,
-    ]);
+    herbTypes.add(herbID);
+    twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   } else {
     //Tranquil için
     //herbin rateini alıcaz
-    const traNeeded = itemData.find((herb) => herb.id === currents[i].id).id;
-    const AmountforTra =
+    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
+    const amountOfHerb =
       (currents[i].tra /
         itemData.find((herb) => herb.id === currents[i].id).price) *
       requiredValue;
-    const costAllforTra =
-      AmountforTra * itemData.find((herb) => herb.id === currents[i].id).price;
+    const totalAmount =
+      amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
     // console.log(traNeeded,AmountforTra,costAllforTra);
-    herbTypes.add(traNeeded);
-    twoDArr.push([
-      "Tra",
-      requiredValue,
-      traNeeded,
-      AmountforTra,
-      costAllforTra,
-    ]);
+    herbTypes.add(herbID);
+    twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   }
   //Gereken Herb Tipi Sayısını Bul ve miktarları
 
   //2D arrayi Herb id sine göre sırala              //+++++
 
   twoDArr.sort(function (a, b) {
-    return b[3] - a[3];
+    return b.totalAmount - a.totalAmount;
   });
-
+  var result = twoDArr.reduce((unique, o) => {
+    if (!unique.some((obj) => obj.herbID === o.herbID)) {
+      unique.push(o);
+    }
+    return unique;
+  }, []);
+  console.log(result);
   // twoDArr.splice(2, 1); //BUG  Duplicate Aranacak
-  console.log(twoDArr);
-  const aqwe = uniqued(twoDArr);
+  // console.log(twoDArr);
 
-  console.log(aqwe);
-  const y = [[twoDArr[0][1]], [twoDArr[1][1]]]; //For ile Atabiliriz.
-
+  const requiredAmountOfHerbs = [
+    [twoDArr[0].requiredValue],
+    [twoDArr[1].requiredValue],
+  ]; //For ile Atabiliriz.
   /************************************************************ */
   /************************************************************ */
   //Rateslerin Çarpımına göre ters Matrisini Al+++++++++
 
   let axx = [];
   for (let i = 0; i < twoDArr.length; i++) {
-    let id = twoDArr[i][2];
+    let id = twoDArr[i].herbID;
     Rates.forEach((item, ind) => {
       if (item[id] !== undefined) {
         axx.push([item[id][2], item[id][1]]);
-        // axx.push();
       }
     });
   }
@@ -192,7 +174,7 @@ function shop(i) {
   /*********************************************************** */
   /*********************************************************** */
   const invertedRates = matrix_invert(transposedRates);
-  const iki = multiplyMatrices(invertedRates, y);
+  const iki = multiplyMatrices(invertedRates, requiredAmountOfHerbs);
 
   // console.log(iki); // Last Herb Amount
 
