@@ -94,8 +94,10 @@ function shop(i) {
   const requiredValue = requires[i].value;
 
   //Lum Pigment için
+
+  //BURASI TEMİZ BİR ŞEKİLDE YAZILACAK. (currents'a ayar vericez)
   if (i === 0) {
-    //herbin rateini alıcaz
+    //Luminous Pigment için
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
       (currents[i].lum /
@@ -103,11 +105,9 @@ function shop(i) {
       requiredValue;
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
-    // console.log(gerekenHerbForLum,amountOfHerb,costAll);
     herbTypes.add(herbID);
     twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   } else if (i === 1) {
-    //herbin rateini alıcaz
     //Umbra Pigment için
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
@@ -116,12 +116,10 @@ function shop(i) {
       requiredValue;
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
-    // console.log(gerekenHerbForUmb, amountOfHerbforUmb,costAllforUmb);
     herbTypes.add(herbID);
     twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   } else {
     //Tranquil için
-    //herbin rateini alıcaz
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
       (currents[i].tra /
@@ -129,65 +127,60 @@ function shop(i) {
       requiredValue;
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
-    // console.log(traNeeded,AmountforTra,costAllforTra);
     herbTypes.add(herbID);
     twoDArr.push({ herbID, requiredValue, amountOfHerb, totalAmount });
   }
-  //Gereken Herb Tipi Sayısını Bul ve miktarları
 
-  //2D arrayi Herb id sine göre sırala              //+++++
-
+  //2D arrayi totalAmount'a göre sırala
   twoDArr.sort(function (a, b) {
     return b.totalAmount - a.totalAmount;
   });
-  var result = twoDArr.reduce((unique, o) => {
+  console.log(twoDArr);
+  // Duplicate Aranacak
+  var uniquedArr = twoDArr.reduce((unique, o) => {
     if (!unique.some((obj) => obj.herbID === o.herbID)) {
       unique.push(o);
     }
     return unique;
   }, []);
-  console.log(result);
-  // twoDArr.splice(2, 1); //BUG  Duplicate Aranacak
-  // console.log(twoDArr);
+  console.log(uniquedArr);
 
+  //Gereken Herb Tipi Sayısını Bul ve miktarları !!!!!!
   const requiredAmountOfHerbs = [
-    [twoDArr[0].requiredValue],
-    [twoDArr[1].requiredValue],
+    [uniquedArr[0].requiredValue],
+    [uniquedArr[1].requiredValue],
   ]; //For ile Atabiliriz.
-  /************************************************************ */
-  /************************************************************ */
-  //Rateslerin Çarpımına göre ters Matrisini Al+++++++++
 
+  //Gereken Herbe ve Ink' e göre Ratesleri al 
+  //For ile Atabiliriz.
   let axx = [];
-  for (let i = 0; i < twoDArr.length; i++) {
-    let id = twoDArr[i].herbID;
+  for (let i = 0; i < uniquedArr.length; i++) {
+    let id = uniquedArr[i].herbID;
     Rates.forEach((item, ind) => {
       if (item[id] !== undefined) {
         axx.push([item[id][2], item[id][1]]);
       }
     });
   }
+  // Gereken Ink'e göre aynı arrayde topla.
+  // Ratesleri Transpose Et
   let transposedRates = axx[0].map((_, colIndex) =>
     axx.map((row) => row[colIndex])
   );
-  // console.log(transposedRates);
-  /*********************************************************** */
-  /*********************************************************** */
+
+  //Transpose edilmiş rateslerin çarpımına göre matrisini al
   const invertedRates = matrix_invert(transposedRates);
+
+  // Transpose edilmiş Ratesler ile Gereken Herb Tipi ve sayısının matris çarpımını al.
   const iki = multiplyMatrices(invertedRates, requiredAmountOfHerbs);
+  console.log(iki); // Last Herb Amount
 
-  // console.log(iki); // Last Herb Amount
-
-  if (requiredValue > 0) {
-    const herbName = itemData.find((herb) => herb.id === currents[i].id).name;
-
-    if (shoppingSec[1].innerText === "Test") {
-      shoppingSec[1].innerText = herbName;
-    }
-
-    if (herbName !== shoppingSec[1].innerText) {
-      shoppingSec[2].innerText = herbName;
-    }
+  //Shopiing List Burada Display Edilecek
+  for (let i = 0; i < uniquedArr.length; i++) {
+    const herbName = itemData.find((herb) => herb.id === uniquedArr[i].herbID)
+      .name;
+    console.log(herbName);
+    shoppingSec[i + 1].innerText = herbName;
   }
 }
 
