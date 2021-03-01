@@ -65,7 +65,6 @@ for (let i = 0; i < Rates.length; i++) {
   const tra = Herb[id][2];
 
   asd[i] = { id, lum, umb, tra };
-
 }
 
 function findMinCost() {
