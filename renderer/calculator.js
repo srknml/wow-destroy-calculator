@@ -129,7 +129,7 @@ function shop(i) {
       totalAmount,
     };
   }
-  const x = [];
+  let x = [];
   for (var item in twoDArrx) {
     x.push([item, twoDArrx[item]]);
   }
@@ -152,14 +152,11 @@ function shop(i) {
   for (let i = 0; i < uniquedArr.length; i++) {
     requiredAmountOfHerbs.push([uniquedArr[i][1].requiredValue]);
   }
-  //Gereken Herbe ve Ink' e göre Ratesleri al
   //For ile Atabiliriz.  ##PROBLEM
-
   let axx = [];
   let baxx = [];
   for (let i = 0; i < uniquedArr.length; i++) {
-    let herbID = uniquedArr[i][1].herbID;
-
+    const herbID = uniquedArr[i][1].herbID;
     Rates.forEach((item) => {
       if (item[herbID] !== undefined) {
         axx.push(item[herbID]);
@@ -167,20 +164,20 @@ function shop(i) {
     });
   }
 
-  // 0 required inka göre belirlenecek
-  axx.forEach(function (v) {
-    delete v[0];
-  });
+  baxx = axx.map((r) => Object.values(r));
 
-  baxx = axx.map((r) => Object.values(r).reverse());
-  console.log(baxx);
   // Gereken Ink'e göre aynı arrayde topla.
 
   // Ratesleri Transpose Et
   let transposedRates = baxx[0].map((col, i) => baxx.map((row) => row[i]));
+  let necessaryRates = [];
+  // required inka göre belirlenecek
+  for (let i = 0; i < uniquedArr.length; i++) {
+    necessaryRates.push(transposedRates[uniquedArr[i][0]]);
+  }
 
   //Transpose edilmiş rateslerin çarpımına göre matrisini al
-  const invertedRates = matrix_invert(transposedRates);
+  const invertedRates = matrix_invert(necessaryRates);
 
   // Transpose edilmiş Ratesler ile Gereken Herb Tipi ve sayısının matris çarpımını al.
   const iki = multiplyMatrices(invertedRates, requiredAmountOfHerbs);
