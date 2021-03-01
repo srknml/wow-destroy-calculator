@@ -14,7 +14,7 @@ function createRequiredSection() {
     item.id = "r-" + itemData[i + 9].id;
     const input = document.createElement("input");
     input.type = "text";
-    input.value = 0;
+    
     item.appendChild(input);
     reqs.appendChild(item);
   }

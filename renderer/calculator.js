@@ -182,6 +182,25 @@ function shop(i) {
   // Transpose edilmiş Ratesler ile Gereken Herb Tipi ve sayısının matris çarpımını al.
   const iki = multiplyMatrices(invertedRates, requiredAmountOfHerbs);
   console.log(iki); // Last Herb Amount
+console.log(uniquedArr);
+  iki.forEach((val,i) => {
+    let j = i
+    if(val > 0){
+      console.log("********Shopping List******\n" + val+ " adet " + " Bu ID deki Herbdan " +uniquedArr[i][1].herbID );
+      
+    }
+    
+  })
+
+
+
+
+
+
+
+
+
+
 }
 
 //Total Sections
