@@ -70,9 +70,7 @@ const shoppingSec = document.querySelectorAll(
   ".shopping-section > .items > .item-name"
 );
 
-// Amount ve Cost Hesaplamaları Yapılacak
-
-const twoDArrx = [];
+const twoDArrx = {};
 
 function shop(i) {
   const requiredValue = requires[i].value;
@@ -80,6 +78,7 @@ function shop(i) {
   //Lum Pigment için
   //BURASI TEMİZ BİR ŞEKİLDE YAZILACAK. (currents'a ayar vericez)
   if (i === 0) {
+    console.log("lum değişti");
     //Luminous Pigment için
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
@@ -89,15 +88,14 @@ function shop(i) {
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
 
-    twoDArrx[i] = { id: i };
-    twoDArrx[i].reqs = {
+    twoDArrx[i] = {
       herbID,
       requiredValue,
       amountOfHerb,
       totalAmount,
-      reqInk: i,
     };
   } else if (i === 1) {
+    console.log("umbra değişti");
     //Umbra Pigment için
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
@@ -107,17 +105,15 @@ function shop(i) {
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
 
-    twoDArrx[i] = { id: i };
-    twoDArrx[i].reqs = {
+    twoDArrx[i] = {
       herbID,
       requiredValue,
       amountOfHerb,
       totalAmount,
-      reqInk: i,
     };
   } else {
     //Tranquil için
-
+    console.log("tranquil değişti");
     const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
     const amountOfHerb =
       (currents[i].tra /
@@ -126,43 +122,43 @@ function shop(i) {
     const totalAmount =
       amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
 
-    twoDArrx[i] = { id: i };
-    twoDArrx[i].reqs = {
+    twoDArrx[i] = {
       herbID,
       requiredValue,
       amountOfHerb,
       totalAmount,
-      reqInk: i,
     };
   }
+  const x = [];
+  for (var item in twoDArrx) {
+    x.push([item, twoDArrx[item]]);
+  }
 
-  //2D arrayi totalAmount'a göre sırala
-  twoDArrx.sort(function (a, b) {
-    return b.reqs.amountOfHerb - a.reqs.amountOfHerb;
+  x.sort(function (a, b) {
+    return b[1].amountOfHerb - a[1].amountOfHerb;
   });
+  //2D arrayi totalAmount'a göre sırala
 
   // Duplicate Aranacak
-  var uniquedArr = twoDArrx.reduce((unique, o) => {
-    if (!unique.some((obj) => obj.reqs.herbID === o.reqs.herbID)) {
+  var uniquedArr = x.reduce((unique, o) => {
+    if (!unique.some((obj) => obj[1].herbID === o[1].herbID)) {
       unique.push(o);
     }
     return unique;
   }, []);
-  console.log(uniquedArr);
   const requiredAmountOfHerbs = [];
 
   //Gereken Herb Tipi Sayısını Bul ve miktarları !!!!!!
   for (let i = 0; i < uniquedArr.length; i++) {
-    requiredAmountOfHerbs.push([uniquedArr[i].reqs.requiredValue]);
+    requiredAmountOfHerbs.push([uniquedArr[i][1].requiredValue]);
   }
-
   //Gereken Herbe ve Ink' e göre Ratesleri al
   //For ile Atabiliriz.  ##PROBLEM
 
   let axx = [];
-
+  let baxx = [];
   for (let i = 0; i < uniquedArr.length; i++) {
-    let herbID = uniquedArr[i].reqs.herbID;
+    let herbID = uniquedArr[i][1].herbID;
 
     Rates.forEach((item) => {
       if (item[herbID] !== undefined) {
@@ -170,15 +166,16 @@ function shop(i) {
       }
     });
   }
+
   // 0 required inka göre belirlenecek
   axx.forEach(function (v) {
     delete v[0];
   });
-  let baxx = axx.map((a) => Object.values(a).reverse());
 
+  baxx = axx.map((r) => Object.values(r).reverse());
   console.log(baxx);
-
   // Gereken Ink'e göre aynı arrayde topla.
+
   // Ratesleri Transpose Et
   let transposedRates = baxx[0].map((col, i) => baxx.map((row) => row[i]));
 
