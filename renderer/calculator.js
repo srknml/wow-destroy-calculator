@@ -174,6 +174,7 @@ function millingCost(shoppingList) {
 function setShoppingList(shopList) {
   const itemSec = document.querySelectorAll(".shopping-section > .items ");
   const shoppingList = shopList;
+  resetShoppingList();
   for (let i = 0; i < shoppingList.length; i++) {
     const a = itemSec[i + 1].querySelectorAll("span");
 
@@ -185,13 +186,28 @@ function setShoppingList(shopList) {
     a[2].innerText = Number(totalC.toFixed(2));
   }
 }
+function resetShoppingList() {
+  const itemSec = document.querySelectorAll(".shopping-section > .items ");
 
+  for (let i = 0; i < 3; i++) {
+    const a = itemSec[i + 1].querySelectorAll("span");
+    a[0].innerText = " ";
+    a[1].innerText = " ";
+    a[2].innerText = " ";
+  }
+}
 function setTotalCosts(t) {
   let total = 0;
   for (let i = 0; i < t.length - 1; i++) {
     const requiredValue = requires[i].value;
     if (t === t2) {
-      t[i].innerText = total += parseInt(t[i].innerText * 100) / 100;
+      t[i].innerText = Number(
+        (
+          (parseInt(itemData[i + 6].price * 100 + 1.5 * 100) / 100) *
+          requiredValue
+        ).toFixed(2)
+      );
+      total += parseInt(t[i].innerText * 100) / 100;
     } else if (t === t3) {
       t[i].innerText = Number(
         ((parseInt(itemData[i + 9].price * 100) / 100) * requiredValue).toFixed(
