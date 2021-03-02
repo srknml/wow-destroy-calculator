@@ -35,9 +35,9 @@ for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
   const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
   const obj = { id: itemData[i].id };
 
-  obj.lum = pigment[0];
-  obj.umb = pigment[1];
-  obj.tra = pigment[2];
+  obj[0] = pigment[0];
+  obj[1] = pigment[1];
+  obj[2] = pigment[2];
   costsForAllPigments.push(obj);
 }
 
@@ -45,13 +45,13 @@ console.log(costsForAllPigments);
 function findMinCost() {
   let minCostsPerPigment = [];
   let minCostForLum = costsForAllPigments.reduce((prev, curr) =>
-    prev.lum < curr.lum ? prev : curr
+    prev[0] < curr[0] ? prev : curr
   );
   let minCostForUmb = costsForAllPigments.reduce((prev, curr) =>
-    prev.umb < curr.umb ? prev : curr
+    prev[1] < curr[1] ? prev : curr
   );
   let minCostForTra = costsForAllPigments.reduce((prev, curr) =>
-    prev.tra < curr.tra ? prev : curr
+    prev[2] < curr[2] ? prev : curr
   );
 
   minCostsPerPigment.push(minCostForLum);
@@ -75,60 +75,20 @@ const twoDArrx = {};
 function shop(i) {
   const requiredValue = requires[i].value;
 
-  //Lum Pigment için
-  //BURASI TEMİZ BİR ŞEKİLDE YAZILACAK. (currents'a ayar vericez)
-  if (i === 0) {
-    console.log("lum değişti");
-    //Luminous Pigment için
-    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
-    const amountOfHerb =
-      (currents[i].lum /
-        itemData.find((herb) => herb.id === currents[i].id).price) *
-      requiredValue;
-    const totalAmount =
-      amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
+  const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
+  const amountOfHerb =
+    (currents[i][i] /
+      itemData.find((herb) => herb.id === currents[i].id).price) *
+    requiredValue;
+  const totalAmount =
+    amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
 
-    twoDArrx[i] = {
-      herbID,
-      requiredValue,
-      amountOfHerb,
-      totalAmount,
-    };
-  } else if (i === 1) {
-    console.log("umbra değişti");
-    //Umbra Pigment için
-    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
-    const amountOfHerb =
-      (currents[i].umb /
-        itemData.find((herb) => herb.id === currents[i].id).price) *
-      requiredValue;
-    const totalAmount =
-      amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
-
-    twoDArrx[i] = {
-      herbID,
-      requiredValue,
-      amountOfHerb,
-      totalAmount,
-    };
-  } else {
-    //Tranquil için
-    console.log("tranquil değişti");
-    const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
-    const amountOfHerb =
-      (currents[i].tra /
-        itemData.find((herb) => herb.id === currents[i].id).price) *
-      requiredValue;
-    const totalAmount =
-      amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
-
-    twoDArrx[i] = {
-      herbID,
-      requiredValue,
-      amountOfHerb,
-      totalAmount,
-    };
-  }
+  twoDArrx[i] = {
+    herbID,
+    requiredValue,
+    amountOfHerb,
+    totalAmount,
+  };
   let x = [];
   for (var item in twoDArrx) {
     x.push([item, twoDArrx[item]]);
@@ -181,60 +141,57 @@ function shop(i) {
 
   // Transpose edilmiş Ratesler ile Gereken Herb Tipi ve sayısının matris çarpımını al.
   const iki = multiplyMatrices(invertedRates, requiredAmountOfHerbs);
-  console.log(iki); // Last Herb Amount
-console.log(uniquedArr);
-  iki.forEach((val,i) => {
-    let j = i
-    if(val > 0){
-      console.log("********Shopping List******\n" + val+ " adet " + " Bu ID deki Herbdan " +uniquedArr[i][1].herbID );
-      
+
+  let shopList = [];
+  iki.forEach((val, i) => {
+    if (val > 0) {
+      shopList.push([val[0], uniquedArr[i][1].herbID]);
     }
-    
-  })
-
-
-
-
-
-
-
-
-
-
+  });
+  const shoppingList = millingCost(shopList);
+  setShoppingList(shoppingList, i);
 }
 
 //Total Sections
 const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
-function millingCost() {
-  let xx = [];
-  const currents = findMinCost();
-  xx.push(currents[0].lum);
-  xx.push(currents[1].umb);
-  xx.push(currents[2].tra);
-  let total = 0;
-  for (let i = 0; i < t1.length - 1; i++) {
-    const requiredValue = requires[i].value;
-    t1[i].innerText = Number(
-      ((parseInt(xx[i] * 100 + 1.5 * 100) / 100) * requiredValue).toFixed(2)
-    );
-    total += parseInt(t1[i].innerText * 100) / 100;
+
+function millingCost(shoppingList) {
+  let axx = [];
+  for (let i = 0; i < shoppingList.length; i++) {
+    const reqValue = shoppingList[i][0];
+    const herbName = itemData.find((herb) => herb.id === shoppingList[i][1])
+      .name;
+    const herbPrice = itemData.find((herb) => herb.id === shoppingList[i][1])
+      .price;
+    const totalCostperHeb = herbPrice * reqValue;
+    axx.push([herbName, reqValue, totalCostperHeb]);
   }
-  t1[3].innerText = Number(total.toFixed(2));
+
+  return axx;
 }
+function setShoppingList(shopList) {
+  const itemSec = document.querySelectorAll(".shopping-section > .items ");
+  const shoppingList = shopList;
+  for (let i = 0; i < shoppingList.length; i++) {
+    const a = itemSec[i + 1].querySelectorAll("span");
+
+    let name = shoppingList[i][0];
+    let reqV = shoppingList[i][1];
+    let totalC = shoppingList[i][2];
+    a[0].innerText = name;
+    a[1].innerText = Number(reqV.toFixed(2));
+    a[2].innerText = Number(totalC.toFixed(2));
+  }
+}
+
 function setTotalCosts(t) {
   let total = 0;
   for (let i = 0; i < t.length - 1; i++) {
     const requiredValue = requires[i].value;
     if (t === t2) {
-      t[i].innerText = Number(
-        (
-          (parseInt(itemData[i + 6].price * 100 + 1.5 * 100) / 100) *
-          requiredValue
-        ).toFixed(2)
-      );
-      total += parseInt(t[i].innerText * 100) / 100;
+      t[i].innerText = total += parseInt(t[i].innerText * 100) / 100;
     } else if (t === t3) {
       t[i].innerText = Number(
         ((parseInt(itemData[i + 9].price * 100) / 100) * requiredValue).toFixed(
@@ -251,8 +208,9 @@ for (let i = 0; i < requires.length; i++) {
   requires[i].addEventListener("change", () => {
     setTotalCosts(t2);
     setTotalCosts(t3);
-    millingCost();
+
     shop(i);
+    // setShoppingList(i);
   });
 }
 

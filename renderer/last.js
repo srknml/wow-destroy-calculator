@@ -62,6 +62,8 @@ function createShoppingList() {
       span2.appendChild(document.createTextNode("Cost"));
     } else {
       itemName.appendChild(document.createTextNode("Test"));
+      span.classList.add("req-value");
+      span2.classList.add("total-C");
     }
 
     item.appendChild(itemName);
