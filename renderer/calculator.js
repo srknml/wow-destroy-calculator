@@ -1,4 +1,4 @@
-const DeathRates = { 169701: { 0: 0.15, 1: 0.14, 2: 0.005 } };
+const DeathRates = { 169701: { 0: 0.155, 1: 0.14, 2: 0.005 } };
 const MarrowRates = { 168589: { 0: 0.091, 1: 0.204, 2: 0.004 } };
 const RisingRates = { 168586: { 0: 0.202, 1: 0.092, 2: 0.004 } };
 const VigilRates = { 170554: { 0: 0.205, 1: 0.097, 2: 0.004 } };
@@ -150,12 +150,38 @@ function shop(i) {
   });
   const shoppingList = millingCost(shopList);
   setShoppingList(shoppingList, i);
+  setExpectedPigments(shopList);
 }
 
 //Total Sections
 const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
+
+function setExpectedPigments(shopList) {
+  const expectedSec = document.querySelectorAll(
+    ".expected-pigments > .items > .item-amount"
+  );
+
+  let Lumamount = 0;
+  let Umbamount = 0;
+  let Traamount = 0;
+  for (let i = 0; i < shopList.length; i++) {
+    const herbID = shopList[i][1];
+    const reqValue = shopList[i][0];
+
+    Rates.forEach((item) => {
+      if (item[herbID] !== undefined) {
+        Lumamount += item[herbID][0] * reqValue;
+        Umbamount += item[herbID][1] * reqValue;
+        Traamount += item[herbID][2] * reqValue;
+        expectedSec[0].innerText = Number(Lumamount.toFixed(2));
+        expectedSec[1].innerText = Number(Umbamount.toFixed(2));
+        expectedSec[2].innerText = Number(Traamount.toFixed(2));
+      }
+    });
+  }
+}
 
 function millingCost(shoppingList) {
   let axx = [];
