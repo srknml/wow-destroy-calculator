@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
     <title>Settings</title>
-</head>
-<body>
-    <input/>
-    <input/>
+  </head>
+  <body>
+    <form class="settings-form">
+      <select name="region" id="region">
+        <option value="Region">Region</option>
+        <option value="na">NA</option>
+        <option value="eu">EU</option>
+      </select>
+      <select name="realm" id="realm">
+        <option value="Realm">Realm</option>
+        <option value="Realm">A</option>
+      </select>
+
+      <input name="id" value="" placeholder="Client-ID" />
+      <input name="secret" value="" placeholder="Client-Secret" />
+      <button type="submit">Submit</button>
+    </form>
+
     <script src="./renderer/settings.js"></script>
-</body>
+  </body>
 </html>

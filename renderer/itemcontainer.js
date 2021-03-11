@@ -79,9 +79,9 @@ function createItemsLayout() {
 
 async function __init__() {
   createItemsLayout();
-  await getPrices();
-  displayPrices();
-  handleUpdate();
+  // await getPrices();
+  // displayPrices();
+  // handleUpdate();
 }
 
 __init__();

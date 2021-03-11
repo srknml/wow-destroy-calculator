@@ -61,27 +61,32 @@ const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
 
+ipcMain.on("user-config", (event, data) => {
+  console.log(data);
+  // event.returnValue = Token Taken  ##
+});
+
 function createWin() {
   let addWin = new BrowserWindow({
     width: 480,
     height: 360,
     title: "Settings",
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   addWin.loadFile("settings.html");
   addWin.on("close", () => {
     addWin = null;
-    console.log("calisti 1");
   });
-  addWin.once('ready-to-show', () => {
-   addWin.show()
-   console.log("calisti 2");
-  })
+  addWin.once("ready-to-show", () => {
+    addWin.show();
+  });
 }
-ipcMain.on("set-window",args => {
-  // console.log("maine window acma geldi");
-  createWin()
-})
+ipcMain.on("set-window", (args) => {
+  createWin();
+});
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
