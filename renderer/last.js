@@ -14,12 +14,13 @@ function createRequiredSection() {
     item.id = "r-" + itemData[i + 9].id;
     const input = document.createElement("input");
     input.type = "text";
+    input.value = "0"
     
     item.appendChild(input);
     reqs.appendChild(item);
   }
 }
-function createExtraSection(params) {
+function createExpectedSection(params) {
   for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
     item.classList.add("items");
@@ -28,12 +29,12 @@ function createExtraSection(params) {
     itemName.appendChild(document.createTextNode(itemData[i + 6].name));
     item.appendChild(itemName);
     const span = document.createElement("span");
+    span.classList.add("item-amount");
     item.appendChild(span);
-
     expected.appendChild(item);
   }
 }
-function createExpectedSection() {
+function createExtraSection() {
   for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
     item.classList.add("items");
@@ -42,6 +43,7 @@ function createExpectedSection() {
     itemName.appendChild(document.createTextNode(itemData[i + 6].name));
     item.appendChild(itemName);
     const span = document.createElement("span");
+    span.classList.add("item-amount");
     item.appendChild(span);
     extra.appendChild(item);
   }

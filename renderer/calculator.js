@@ -41,7 +41,6 @@ for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
   costsForAllPigments.push(obj);
 }
 
-console.log(costsForAllPigments);
 function findMinCost() {
   let minCostsPerPigment = [];
   let minCostForLum = costsForAllPigments.reduce((prev, curr) =>
@@ -93,11 +92,10 @@ function shop(i) {
   for (var item in twoDArrx) {
     x.push([item, twoDArrx[item]]);
   }
-
+  //2D arrayi totalAmount'a göre sırala
   x.sort(function (a, b) {
     return b[1].amountOfHerb - a[1].amountOfHerb;
   });
-  //2D arrayi totalAmount'a göre sırala
 
   // Duplicate Aranacak
   var uniquedArr = x.reduce((unique, o) => {
@@ -151,18 +149,26 @@ function shop(i) {
   const shoppingList = millingCost(shopList);
   setShoppingList(shoppingList, i);
   setExpectedPigments(shopList);
+  setExtraPigments(twoDArrx);
 }
 
 //Total Sections
 const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
-
+const expectedSec = document.querySelectorAll(
+  ".expected-pigments > .items > .item-amount"
+);
+const extraSec = document.querySelectorAll(
+  ".extraneous-pigments > .items > .item-amount"
+);
+function setExtraPigments() {
+  for (let i = 0; i < extraSec.length; i++) {
+    let reqV = requires[i].value;
+    extraSec[i].innerText = Math.floor(expectedSec[i].innerText - reqV);
+  }
+}
 function setExpectedPigments(shopList) {
-  const expectedSec = document.querySelectorAll(
-    ".expected-pigments > .items > .item-amount"
-  );
-
   let Lumamount = 0;
   let Umbamount = 0;
   let Traamount = 0;
@@ -226,6 +232,7 @@ function setTotalCosts(t) {
   let total = 0;
   for (let i = 0; i < t.length - 1; i++) {
     const requiredValue = requires[i].value;
+
     if (t === t2) {
       t[i].innerText = Number(
         (
@@ -252,11 +259,9 @@ for (let i = 0; i < requires.length; i++) {
     setTotalCosts(t3);
 
     shop(i);
-    // setShoppingList(i);
   });
 }
 
-// Returns the inverse of matrix `M`.
 function matrix_invert(M) {
   if (M.length !== M[0].length) {
     return;
