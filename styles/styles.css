@@ -18,7 +18,8 @@
   background-color: rgb(0, 0, 0);
 }
 .header {
-  background-color: rgb(63, 35, 25);
+  color: white;
+  background-color: rgb(14, 13, 13);
 }
 .container {
   display: -ms-flexbox;
@@ -89,13 +90,14 @@
   background-color: rgb(33, 37, 48);
   margin-bottom: 2px;
 }
-.item-name {
+.item-name  {
   font-size: 16px;
   font-weight: 600;
   flex-grow: 3;
-  max-width: 150px;
+  max-width: 135px;
+  min-width: 135px;
   margin-left: 6px;
-  padding: 3px 3px;
+  padding: 3px 1px;
   background-color: #ee9817;
   color: black;
 }
@@ -104,7 +106,7 @@ input {
   height: 20px;
 }
 
-.item-price {
+.item-price , .item-amount, .req-value,.total-C {
   margin-right: 5px;
   color: white;
   text-align: center;

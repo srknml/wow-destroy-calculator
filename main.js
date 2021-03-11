@@ -65,14 +65,23 @@ function createWin() {
   let addWin = new BrowserWindow({
     width: 480,
     height: 360,
-    title: "New Winssdsow",
+    title: "Settings",
   });
-  addWin.loadFile("modal.html");
+
+  addWin.loadFile("settings.html");
   addWin.on("close", () => {
     addWin = null;
+    console.log("calisti 1");
   });
+  addWin.once('ready-to-show', () => {
+   addWin.show()
+   console.log("calisti 2");
+  })
 }
-
+ipcMain.on("set-window",args => {
+  // console.log("maine window acma geldi");
+  createWin()
+})
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 

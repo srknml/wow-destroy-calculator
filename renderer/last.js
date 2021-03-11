@@ -20,7 +20,7 @@ function createRequiredSection() {
     reqs.appendChild(item);
   }
 }
-function createExpectedSection(params) {
+function createExpectedSection() {
   for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
     item.classList.add("items");
