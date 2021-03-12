@@ -71,11 +71,9 @@ const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
 ipcMain.on("user-config", (event, data) => {
+  store.set("user-config", data);
+  console.log(store.get("user-config"));
 
-  store.set("user-config",data)
-console.log(store.get("user-config"));
-
-  
   // event.returnValue = Token Taken  ##
 });
 
