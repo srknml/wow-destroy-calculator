@@ -16,7 +16,6 @@ class DataProvider {
   async getConnectedRealmId() {
     try {
       this.token = await this.oauthClient.getToken();
-
       const response = await fetch(this.CONNECTED_REALM_URL, {
         method: "GET",
         headers: {

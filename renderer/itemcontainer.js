@@ -81,7 +81,7 @@ async function __init__() {
   createItemsLayout();
   // await getPrices();
   // displayPrices();
-  // handleUpdate();
+  handleUpdate();
 }
 
 __init__();
