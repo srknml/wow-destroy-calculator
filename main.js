@@ -72,7 +72,6 @@ const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
 ipcMain.on("user-config", (event, data) => {
   store.set("user-config", data);
-  console.log(store.get("user-config"));
 
   // event.returnValue = Token Taken  ##
 });
@@ -98,8 +97,12 @@ function createWin() {
 ipcMain.on("set-window", (args) => {
   createWin();
 });
+
+setUserSettings()
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
+
+
 
 //Listens Update Button
 ipcMain.on("Prices", async (event) => {
@@ -107,3 +110,13 @@ ipcMain.on("Prices", async (event) => {
   const currentPrices = await dataProvider.getAuctionHouseResponse();
   event.returnValue = currentPrices;
 });
+
+
+
+function setUserSettings() {
+  let cfg = store.get("user-config");
+  userConfig.region = cfg.region;
+  userConfig.realm = cfg.realm;
+  OAuthConfig.client.id = cfg.id;
+  OAuthConfig.client.secret = cfg.secret;
+}
