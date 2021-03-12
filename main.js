@@ -1,6 +1,7 @@
 const electron = require("electron");
 const OauthClient = require("./OAuth/client");
 const DataProvider = require("./Data/data");
+const Store = require("./Store/store.js");
 const { OAuthConfig } = require("./OAuth/config");
 const { userConfig } = require("./Data/userconfig");
 
@@ -9,6 +10,15 @@ require("electron-reload")(__dirname, {
   electron: require(`${__dirname}/node_modules/electron`),
 });
 const { app, BrowserWindow, Menu, ipcMain } = electron;
+
+const store = new Store({
+  // We'll call our data file 'user-preferences'
+  configName: "user-preferences",
+  defaults: {
+    // 800x600 is the default size of our window
+    windowBounds: { width: 800, height: 600 },
+  },
+});
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -60,9 +70,12 @@ const mainMenuTemplate = [
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
-
 ipcMain.on("user-config", (event, data) => {
-  console.log(data);
+
+  store.set("user-config",data)
+console.log(store.get("user-config"));
+
+  
   // event.returnValue = Token Taken  ##
 });
 
