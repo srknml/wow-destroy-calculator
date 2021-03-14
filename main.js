@@ -70,10 +70,44 @@ const mainMenuTemplate = [
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
 Menu.setApplicationMenu(mainMenu);
-ipcMain.on("user-config", (event, data) => {
-  store.set("user-config", data);
+setUserSettings();
+const oauthClient = new OauthClient(OAuthConfig);
+const dataProvider = new DataProvider(oauthClient, userConfig);
 
+function getFromLocal(params) {
+  const cfg = store.get("user-config");
+  return cfg;
+}
+function setToLocal(data) {
+  store.set("user-config", data);
+}
+console.log(OAuthConfig);
+function setUserSettings() {
+  const data = getFromLocal();
+  userConfig.region = data.region;
+  userConfig.realm = data.realm;
+  OAuthConfig.client.id = data.id;
+  OAuthConfig.client.secret = data.secret;
+}
+
+//SUBMIT
+ipcMain.on("user-config", (event, data) => {
+  setToLocal(data);
+  setUserSettings();
   // event.returnValue = Token Taken  ##
+});
+//for display
+ipcMain.on("asks-user-data", (event, arg) => {
+  const user_data = getFromLocal();
+  event.reply("user-data", user_data);
+});
+
+//Listens Update Button
+ipcMain.on("Prices", async (event) => {
+  setUserSettings();
+  await dataProvider.getConnectedRealmId(); //At the same time it gets token
+  const currentPrices = await dataProvider.getAuctionHouseResponse();
+  event.returnValue = currentPrices;
 });
 
 function createWin() {
@@ -97,26 +131,3 @@ function createWin() {
 ipcMain.on("set-window", (args) => {
   createWin();
 });
-
-setUserSettings()
-const oauthClient = new OauthClient(OAuthConfig);
-const dataProvider = new DataProvider(oauthClient, userConfig);
-
-
-
-//Listens Update Button
-ipcMain.on("Prices", async (event) => {
-  await dataProvider.getConnectedRealmId(); //At the same time it gets token
-  const currentPrices = await dataProvider.getAuctionHouseResponse();
-  event.returnValue = currentPrices;
-});
-
-
-
-function setUserSettings() {
-  let cfg = store.get("user-config");
-  userConfig.region = cfg.region;
-  userConfig.realm = cfg.realm;
-  OAuthConfig.client.id = cfg.id;
-  OAuthConfig.client.secret = cfg.secret;
-}

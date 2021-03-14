@@ -20,7 +20,7 @@ class OAuthClient {
 
       return this.reduceToken(this.token);
     } catch (error) {
-      console.log("Access Token error", error.message);
+      console.log("Access Token Error =>>", error.message);
     }
   }
   reduceToken(token) {

@@ -8,5 +8,4 @@ const OAuthConfig = {
   },
 };
 
-
 exports.OAuthConfig = OAuthConfig;
