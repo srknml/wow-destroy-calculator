@@ -81,9 +81,8 @@ function getFromLocal(params) {
 function setToLocal(data) {
   store.set("user-config", data);
 }
-console.log(OAuthConfig);
 function setUserSettings() {
-  const data = getFromLocal();
+  const data = store.get("user-config");
   userConfig.region = data.region;
   userConfig.realm = data.realm;
   OAuthConfig.client.id = data.id;
@@ -92,13 +91,14 @@ function setUserSettings() {
 
 //SUBMIT
 ipcMain.on("user-config", (event, data) => {
-  setToLocal(data);
+  store.set("user-config", data);
   setUserSettings();
-  // event.returnValue = Token Taken  ##
+  // event.returnValue = Token Taken  ## DENENEBILIR
 });
+
 //for display
 ipcMain.on("asks-user-data", (event, arg) => {
-  const user_data = getFromLocal();
+  const user_data = store.get("user-config");
   event.reply("user-data", user_data);
 });
 

@@ -13,32 +13,34 @@ Rates.push(VigilRates);
 Rates.push(WidowRates);
 Rates.push(NightRates);
 
-const LIST_OF_GOLD_PER_PIGMENTS = [];
-
-for (let i = 0; i < 6; i++) {
-  const price = itemData[i].price;
-  const id = itemData[i].id;
-  const Herb = {};
-  Herb[id] = [];
-  for (let j = 0; j < 3; j++) {
-    const rate = Rates[i][id][j];
-    const GoldPigment = (1 / rate) * price;
-    Herb[id].push(GoldPigment);
-  }
-
-  LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
-}
-//************************************* */
 const costsForAllPigments = [];
 
-for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
-  const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
-  const obj = { id: itemData[i].id };
+function calculatePigmentCostForAllHerbs() {
+  const LIST_OF_GOLD_PER_PIGMENTS = [];
+  for (let i = 0; i < 6; i++) {
+    const price = itemData[i].price;
+    const id = itemData[i].id;
+    const Herb = {};
+    Herb[id] = [];
+    for (let j = 0; j < 3; j++) {
+      const rate = Rates[i][id][j];
+      const GoldPigment = (1 / rate) * price;
+      Herb[id].push(GoldPigment);
+    }
 
-  obj[0] = pigment[0];
-  obj[1] = pigment[1];
-  obj[2] = pigment[2];
-  costsForAllPigments.push(obj);
+    LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
+  }
+  //************************************* */
+
+  for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
+    const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
+    const obj = { id: itemData[i].id };
+    console.log(pigment);
+    obj[0] = pigment[0];
+    obj[1] = pigment[1];
+    obj[2] = pigment[2];
+    costsForAllPigments.push(obj);
+  }
 }
 
 function findMinCost() {
@@ -59,7 +61,6 @@ function findMinCost() {
 
   return minCostsPerPigment;
 }
-const currents = findMinCost();
 
 const requires = document.querySelectorAll(
   ".required-section > .items > input "
@@ -72,8 +73,10 @@ const shoppingSec = document.querySelectorAll(
 const twoDArrx = {};
 
 function shop(i) {
+  const currents = findMinCost();
+  console.log({ currents });
   const requiredValue = requires[i].value;
-
+  console.log({ requiredValue });
   const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
   const amountOfHerb =
     (currents[i][i] /
@@ -88,6 +91,7 @@ function shop(i) {
     amountOfHerb,
     totalAmount,
   };
+  console.log({ twoDArrx });
   let x = [];
   for (var item in twoDArrx) {
     x.push([item, twoDArrx[item]]);
@@ -96,7 +100,7 @@ function shop(i) {
   x.sort(function (a, b) {
     return b[1].amountOfHerb - a[1].amountOfHerb;
   });
-
+  console.log({ x });
   // Duplicate Aranacak
   var uniquedArr = x.reduce((unique, o) => {
     if (!unique.some((obj) => obj[1].herbID === o[1].herbID)) {
@@ -105,7 +109,7 @@ function shop(i) {
     return unique;
   }, []);
   const requiredAmountOfHerbs = [];
-
+  console.log({ uniquedArr });
   //Gereken Herb Tipi Sayısını Bul ve miktarları !!!!!!
   for (let i = 0; i < uniquedArr.length; i++) {
     requiredAmountOfHerbs.push([uniquedArr[i][1].requiredValue]);
@@ -147,6 +151,7 @@ function shop(i) {
     }
   });
   const shoppingList = millingCost(shopList);
+  console.log({ shoppingList });
   setShoppingList(shoppingList, i);
   setExpectedPigments(shopList);
   setExtraPigments(twoDArrx);
@@ -217,6 +222,13 @@ function setShoppingList(shopList) {
     a[1].innerText = Number(reqV.toFixed(2));
     a[2].innerText = Number(totalC.toFixed(2));
   }
+}
+function resetRequiredValues() {
+  for (let i = 0; i < requires.length; i++) {
+    requires[i].value = 0;
+  }
+
+  resetShoppingList();
 }
 function resetShoppingList() {
   const itemSec = document.querySelectorAll(".shopping-section > .items ");

@@ -15,7 +15,6 @@ class OAuthClient {
     try {
       if (this.token === null || this.token.expired()) {
         this.token = await this.client.getToken(tokenParams);
-        console.log(this.token);
       }
 
       return this.reduceToken(this.token);

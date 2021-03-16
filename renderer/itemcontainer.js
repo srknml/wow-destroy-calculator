@@ -19,12 +19,13 @@ const itemData = [
 ];
 
 const itemContainer = document.querySelectorAll(".container-item")[0];
-
 function handleUpdate() {
   const btn = document.querySelector("#updatePrices");
   btn.addEventListener("click", async () => {
     await getPrices();
     displayPrices();
+    resetRequiredValues();
+    calculatePigmentCostForAllHerbs();
   });
 }
 
@@ -46,6 +47,7 @@ function displayPrices() {
     }
   }
 }
+
 //Vendorları ayrı oluştur.
 function createItemsLayout() {
   for (let i = 0; i < itemData.length; i++) {
