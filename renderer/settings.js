@@ -296,14 +296,20 @@ function listRealms() {
   }
 }
 handleSubmit = (event) => {
-  ipcRenderer.send("user-config", USER_DATA);
   console.log(USER_DATA);
+  ipcRenderer.send("user-config", USER_DATA);
+  checkToken()
   event.preventDefault();
 };
 handleChange = (event) => {
   USER_DATA[`${event.target.name}`] = event.target.value;
-  // console.log(USER_DATA);
+  console.log(USER_DATA);
 };
 const form = document.querySelector(".settings-form");
 form.addEventListener("submit", handleSubmit);
 form.addEventListener("change", handleChange);
+
+async function checkToken() {
+  const tokenStatus = await ipcRenderer.sendSync("check-token");
+  console.log(tokenStatus);
+}

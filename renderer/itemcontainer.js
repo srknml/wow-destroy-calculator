@@ -89,6 +89,5 @@ async function __init__() {
 __init__();
 
 document.querySelector(".asd").addEventListener("click", () => {
-  console.log("Clicked");
   ipcRenderer.send("set-window");
 });

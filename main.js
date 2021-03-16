@@ -68,25 +68,31 @@ const mainMenuTemplate = [
 ];
 
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-
+let x = "deneme";
 Menu.setApplicationMenu(mainMenu);
-setUserSettings();
+// setUserSettings();
+checkUserSettings();
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
-function getFromLocal(params) {
-  const cfg = store.get("user-config");
-  return cfg;
-}
-function setToLocal(data) {
-  store.set("user-config", data);
-}
 function setUserSettings() {
   const data = store.get("user-config");
+  // console.log("setUserSettings", data);
   userConfig.region = data.region;
   userConfig.realm = data.realm;
   OAuthConfig.client.id = data.id;
   OAuthConfig.client.secret = data.secret;
+}
+
+function checkUserSettings() {
+  console.log("Checking user Settings");
+  const data = store.get("user-config");
+  if (data === undefined) {
+    console.log("Settings girilmesi lazim");
+  } else {
+    setUserSettings();
+    console.log("Settings Done!");
+  }
 }
 
 //SUBMIT
@@ -94,6 +100,16 @@ ipcMain.on("user-config", (event, data) => {
   store.set("user-config", data);
   setUserSettings();
   // event.returnValue = Token Taken  ## DENENEBILIR
+});
+
+ipcMain.on("check-token", async (event, args) => {
+  console.log("Checking Token");
+  const tokenStatus = await oauthClient.getToken();
+  if (tokenStatus === false) {
+    event.returnValue = "Naahh";
+  }
+  console.log(tokenStatus);
+  event.returnValue = "Yeess";
 });
 
 //for display
