@@ -5,9 +5,9 @@ const { ClientCredentials } = require("simple-oauth2");
 const { ipcMain } = electron;
 class OAuthClient {
   constructor(OAuthConfig) {
+    this.x = OAuthConfig;
     this.client = new ClientCredentials(OAuthConfig);
     this.token = null;
-    this.x = OAuthConfig
   }
 
   async getToken() {
@@ -15,10 +15,10 @@ class OAuthClient {
       scope: null,
     };
     try {
-      // if (this.token === null || this.token.expired()) {
-        console.log(this.client);
+      if (this.token === null || this.token.expired()) {
         this.token = await this.client.getToken(tokenParams);
-      // }
+      }
+
       return this.reduceToken(this.token);
     } catch (error) {
       console.log("Access Token Error =>>", error.message);

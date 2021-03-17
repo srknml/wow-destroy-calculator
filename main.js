@@ -66,18 +66,14 @@ const mainMenuTemplate = [
     ],
   },
 ];
-
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-let x = "deneme";
 Menu.setApplicationMenu(mainMenu);
-// setUserSettings();
 checkUserSettings();
 const oauthClient = new OauthClient(OAuthConfig);
 const dataProvider = new DataProvider(oauthClient, userConfig);
 
 function setUserSettings() {
   const data = store.get("user-config");
-  // console.log("setUserSettings", data);
   userConfig.region = data.region;
   userConfig.realm = data.realm;
   OAuthConfig.client.id = data.id;
@@ -85,7 +81,6 @@ function setUserSettings() {
 }
 
 function checkUserSettings() {
-  console.log("Checking user Settings");
   const data = store.get("user-config");
   if (data === undefined) {
     console.log("Settings girilmesi lazim");
@@ -103,7 +98,6 @@ ipcMain.on("user-config", (event, data) => {
 });
 
 ipcMain.on("check-token", async (event, args) => {
-  console.log("Checking Token");
   const tokenStatus = await oauthClient.getToken();
   if (tokenStatus === false) {
     event.returnValue = "Naahh";

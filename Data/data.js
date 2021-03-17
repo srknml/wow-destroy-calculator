@@ -94,7 +94,6 @@ class DataProvider {
             );
           } else {
             currentAuction.buyout / 10000;
-            console.log("else girildi");
           }
         }
       }

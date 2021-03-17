@@ -229,6 +229,10 @@ function resetRequiredValues() {
   }
 
   resetShoppingList();
+  resetSections(t2)
+  resetSections(t3)
+  resetSections(expectedSec)
+  resetSections(extraSec)
 }
 function resetShoppingList() {
   const itemSec = document.querySelectorAll(".shopping-section > .items ");
@@ -263,6 +267,19 @@ function setTotalCosts(t) {
     }
   }
   t[3].innerText = Number(total.toFixed(2));
+}
+
+
+function resetSections(sec) {
+
+  for (let i = 0; i < sec.length; i++) {
+    sec[i].innerText = "0"
+
+  }
+
+
+
+
 }
 
 for (let i = 0; i < requires.length; i++) {
