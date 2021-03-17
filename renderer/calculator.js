@@ -167,6 +167,7 @@ const expectedSec = document.querySelectorAll(
 const extraSec = document.querySelectorAll(
   ".extraneous-pigments > .items > .item-amount"
 );
+const itemSec = document.querySelectorAll(".shopping-section > .items ");
 function setExtraPigments() {
   for (let i = 0; i < extraSec.length; i++) {
     let reqV = requires[i].value;
@@ -213,7 +214,7 @@ function setShoppingList(shopList) {
   const shoppingList = shopList;
   resetShoppingList();
   for (let i = 0; i < shoppingList.length; i++) {
-    const a = itemSec[i + 1].querySelectorAll("span");
+    const a = itemSec[i].querySelectorAll("span");
 
     let name = shoppingList[i][0];
     let reqV = shoppingList[i][1];
@@ -223,22 +224,22 @@ function setShoppingList(shopList) {
     a[2].innerText = Number(totalC.toFixed(2));
   }
 }
-function resetRequiredValues() {
+function resetAllSections() {
+  //Reset Required Sec.
   for (let i = 0; i < requires.length; i++) {
     requires[i].value = 0;
   }
 
   resetShoppingList();
-  resetSections(t2)
-  resetSections(t3)
-  resetSections(expectedSec)
-  resetSections(extraSec)
+  resetSections(t1);
+  resetSections(t2);
+  resetSections(t3);
+  resetSections(expectedSec);
+  resetSections(extraSec);
 }
 function resetShoppingList() {
-  const itemSec = document.querySelectorAll(".shopping-section > .items ");
-
   for (let i = 0; i < 3; i++) {
-    const a = itemSec[i + 1].querySelectorAll("span");
+    const a = itemSec[i].querySelectorAll("span");
     a[0].innerText = " ";
     a[1].innerText = " ";
     a[2].innerText = " ";
@@ -269,24 +270,16 @@ function setTotalCosts(t) {
   t[3].innerText = Number(total.toFixed(2));
 }
 
-
 function resetSections(sec) {
-
   for (let i = 0; i < sec.length; i++) {
-    sec[i].innerText = "0"
-
+    sec[i].innerText = 0;
   }
-
-
-
-
 }
 
 for (let i = 0; i < requires.length; i++) {
   requires[i].addEventListener("change", () => {
     setTotalCosts(t2);
     setTotalCosts(t3);
-
     shop(i);
   });
 }

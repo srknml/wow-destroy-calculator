@@ -3,6 +3,7 @@ const expected = document.querySelector(".expected-pigments");
 const extra = document.querySelector(".extraneous-pigments");
 const shopping = document.querySelector(".shopping-section");
 
+//#######   KOD TEKRARI ##########\\
 function createRequiredSection() {
   for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
@@ -14,8 +15,8 @@ function createRequiredSection() {
     item.id = "r-" + itemData[i + 9].id;
     const input = document.createElement("input");
     input.type = "text";
-    input.value = "0"
-    
+    input.value = "0";
+
     item.appendChild(input);
     reqs.appendChild(item);
   }
@@ -50,23 +51,30 @@ function createExtraSection() {
 }
 
 function createShoppingList() {
-  for (let i = 0; i < 4; i++) {
+  const itema = document.createElement("div");
+  itema.classList.add("itemss");
+  const itemNamea = document.createElement("span");
+  itemNamea.classList.add("item-name");
+  const spana = document.createElement("span");
+  const spana2 = document.createElement("span");
+  itemNamea.appendChild(document.createTextNode("Herb"));
+  spana.appendChild(document.createTextNode("Amount"));
+  spana2.appendChild(document.createTextNode("Cost"));
+  itema.appendChild(itemNamea);
+  itema.appendChild(spana);
+  itema.appendChild(spana2);
+  shopping.appendChild(itema);
+
+  for (let i = 0; i < 3; i++) {
     const item = document.createElement("div");
     item.classList.add("items");
     const itemName = document.createElement("span");
     itemName.classList.add("item-name");
     const span = document.createElement("span");
     const span2 = document.createElement("span");
-
-    if (i === 0) {
-      itemName.appendChild(document.createTextNode("Herb"));
-      span.appendChild(document.createTextNode("Amount"));
-      span2.appendChild(document.createTextNode("Cost"));
-    } else {
-      itemName.appendChild(document.createTextNode(" "));
-      span.classList.add("req-value");
-      span2.classList.add("total-C");
-    }
+    itemName.appendChild(document.createTextNode(" "));
+    span.classList.add("req-value");
+    span2.classList.add("total-C");
 
     item.appendChild(itemName);
     item.appendChild(span);
@@ -74,6 +82,7 @@ function createShoppingList() {
 
     shopping.appendChild(item);
   }
+  console.log(shopping);
 }
 createShoppingList();
 createExtraSection();

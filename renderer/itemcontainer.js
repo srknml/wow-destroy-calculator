@@ -24,7 +24,7 @@ function handleUpdate() {
   btn.addEventListener("click", async () => {
     await getPrices();
     displayPrices();
-    resetRequiredValues();
+    resetAllSections();
     calculatePigmentCostForAllHerbs();
   });
 }
@@ -72,22 +72,23 @@ function createItemsLayout() {
     item.appendChild(price);
   }
 
+  createUpdateBtn();
+}
+
+async function __init__() {
+  createItemsLayout();
+  handleUpdate();
+}
+
+__init__();
+
+document.querySelector(".set-btn").addEventListener("click", () => {
+  ipcRenderer.send("set-window");
+});
+function createUpdateBtn() {
   const updateBtn = document.createElement("button");
   updateBtn.classList.add("update-btn");
   updateBtn.id = "updatePrices";
   updateBtn.appendChild(document.createTextNode("Update Prices"));
   itemContainer.appendChild(updateBtn);
 }
-
-async function __init__() {
-  createItemsLayout();
-  // await getPrices();
-  // displayPrices();
-  handleUpdate();
-}
-
-__init__();
-
-document.querySelector(".asd").addEventListener("click", () => {
-  ipcRenderer.send("set-window");
-});
