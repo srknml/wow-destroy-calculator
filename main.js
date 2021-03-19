@@ -9,7 +9,7 @@ require("electron-reload")(__dirname, {
   // Note that the path to electron may vary according to the main file
   electron: require(`${__dirname}/node_modules/electron`),
 });
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const { app, BrowserWindow, Menu, ipcMain, dialog } = electron;
 
 const store = new Store({
   // We'll call our data file 'user-preferences'
@@ -31,7 +31,7 @@ function createWindow() {
 
   win.loadFile("index.html");
 }
-app.whenReady().then(createWindow);
+// app.whenReady().then(createWindow);
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
@@ -43,7 +43,7 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
+app.whenReady().then(createWindow).then(checkUserSettings);
 const mainMenuTemplate = [
   {
     label: "Menuss",
@@ -83,10 +83,20 @@ function setUserSettings() {
 function checkUserSettings() {
   const data = store.get("user-config");
   if (data === undefined) {
-    console.log("Settings girilmesi lazim");
+    const options = {
+      type: "question",
+      buttons: ["Close"],
+      defaultId: 2,
+      title: "Reminder",
+      message: "It seems your did not set your settings!",
+      detail: "Please set your settings before use the application!",
+    };
+    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+      console.log(response);
+      console.log(checkboxChecked);
+    });
   } else {
     setUserSettings();
-    console.log("Settings Done!");
   }
 }
 
@@ -99,11 +109,11 @@ ipcMain.on("user-config", (event, data) => {
 
 ipcMain.on("check-token", async (event, args) => {
   const tokenStatus = await oauthClient.getToken();
-  if (tokenStatus === false) {
-    event.returnValue = "Naahh";
+  if (tokenStatus === null) {
+    event.returnValue = false;
   }
   console.log(tokenStatus);
-  event.returnValue = "Yeess";
+  event.returnValue = true;
 });
 
 //for display
@@ -114,7 +124,7 @@ ipcMain.on("asks-user-data", (event, arg) => {
 
 //Listens Update Button
 ipcMain.on("Prices", async (event) => {
-  setUserSettings();
+  // setUserSettings();
   await dataProvider.getConnectedRealmId(); //At the same time it gets token
   const currentPrices = await dataProvider.getAuctionHouseResponse();
   event.returnValue = currentPrices;

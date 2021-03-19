@@ -5,7 +5,6 @@ const { ClientCredentials } = require("simple-oauth2");
 const { ipcMain } = electron;
 class OAuthClient {
   constructor(OAuthConfig) {
-    this.x = OAuthConfig;
     this.client = new ClientCredentials(OAuthConfig);
     this.token = null;
   }
@@ -22,7 +21,7 @@ class OAuthClient {
       return this.reduceToken(this.token);
     } catch (error) {
       console.log("Access Token Error =>>", error.message);
-      return false;
+      return null;
     }
   }
   reduceToken(token) {

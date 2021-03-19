@@ -5,7 +5,7 @@ const VigilRates = { 170554: { 0: 0.205, 1: 0.097, 2: 0.004 } };
 const WidowRates = { 168583: { 0: 0.096, 1: 0.194, 2: 0.005 } };
 const NightRates = { 171315: { 0: 0.232, 1: 0.263, 2: 0.305 } };
 const Rates = [];
-
+checkToken()
 Rates.push(DeathRates);
 Rates.push(MarrowRates);
 Rates.push(RisingRates);
@@ -368,4 +368,17 @@ function multiplyMatrices(m1, m2) {
     }
   }
   return result;
+}
+async function checkToken() {
+  const tokenStatus = await ipcRenderer.sendSync("check-token");
+  if(tokenStatus){
+    console.log("True");
+    document.querySelector(".token-status").innerText = "Your Token Status : ✔"
+    
+  }
+  else{
+    console.log("false");
+    document.querySelector(".token-status").innerText = "Your Token Status : ❌"
+    alert("There is a problem with your token status. Please check your settings! ")
+  }
 }
