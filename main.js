@@ -43,7 +43,7 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-app.whenReady().then(createWindow).then(checkUserSettings);
+app.whenReady().then(createWindow);
 const mainMenuTemplate = [
   {
     label: "Menuss",
@@ -112,7 +112,6 @@ ipcMain.on("check-token", async (event, args) => {
   if (tokenStatus === null) {
     event.returnValue = false;
   }
-  console.log(tokenStatus);
   event.returnValue = true;
 });
 

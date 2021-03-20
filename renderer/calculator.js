@@ -380,5 +380,6 @@ async function checkToken() {
     console.log("false");
     document.querySelector(".token-status").innerText = "Your Token Status : ❌"
     alert("There is a problem with your token status. Please check your settings! ")
+    document.querySelector(".update-btn").disabled = true
   }
 }
