@@ -74,9 +74,7 @@ const twoDArrx = {};
 
 function shop(i) {
   const currents = findMinCost();
-  console.log({ currents });
   const requiredValue = requires[i].value;
-  console.log({ requiredValue });
   const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
   const amountOfHerb =
     (currents[i][i] /
