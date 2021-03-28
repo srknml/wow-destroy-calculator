@@ -5,7 +5,7 @@ const VigilRates = { 170554: { 0: 0.205, 1: 0.097, 2: 0.004 } };
 const WidowRates = { 168583: { 0: 0.096, 1: 0.194, 2: 0.005 } };
 const NightRates = { 171315: { 0: 0.232, 1: 0.263, 2: 0.305 } };
 const Rates = [];
-checkToken()
+checkToken();
 Rates.push(DeathRates);
 Rates.push(MarrowRates);
 Rates.push(RisingRates);
@@ -14,9 +14,9 @@ Rates.push(WidowRates);
 Rates.push(NightRates);
 
 const costsForAllPigments = [];
-
 function calculatePigmentCostForAllHerbs() {
   const LIST_OF_GOLD_PER_PIGMENTS = [];
+
   for (let i = 0; i < 6; i++) {
     const price = itemData[i].price;
     const id = itemData[i].id;
@@ -31,11 +31,9 @@ function calculatePigmentCostForAllHerbs() {
     LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
   }
   //************************************* */
-
   for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
     const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
     const obj = { id: itemData[i].id };
-    console.log(pigment);
     obj[0] = pigment[0];
     obj[1] = pigment[1];
     obj[2] = pigment[2];
@@ -89,7 +87,6 @@ function shop(i) {
     amountOfHerb,
     totalAmount,
   };
-  console.log({ twoDArrx });
   let x = [];
   for (var item in twoDArrx) {
     x.push([item, twoDArrx[item]]);
@@ -98,7 +95,6 @@ function shop(i) {
   x.sort(function (a, b) {
     return b[1].amountOfHerb - a[1].amountOfHerb;
   });
-  console.log({ x });
   // Duplicate Aranacak
   var uniquedArr = x.reduce((unique, o) => {
     if (!unique.some((obj) => obj[1].herbID === o[1].herbID)) {
@@ -107,29 +103,27 @@ function shop(i) {
     return unique;
   }, []);
   const requiredAmountOfHerbs = [];
-  console.log({ uniquedArr });
   //Gereken Herb Tipi Sayısını Bul ve miktarları !!!!!!
   for (let i = 0; i < uniquedArr.length; i++) {
     requiredAmountOfHerbs.push([uniquedArr[i][1].requiredValue]);
   }
   //For ile Atabiliriz.  ##PROBLEM
-  let axx = [];
-  let baxx = [];
+  let reqRates = [];
   for (let i = 0; i < uniquedArr.length; i++) {
     const herbID = uniquedArr[i][1].herbID;
     Rates.forEach((item) => {
       if (item[herbID] !== undefined) {
-        axx.push(item[herbID]);
+        reqRates.push(Object.values(item[herbID]));
       }
     });
   }
 
-  baxx = axx.map((r) => Object.values(r));
-
   // Gereken Ink'e göre aynı arrayde topla.
 
   // Ratesleri Transpose Et
-  let transposedRates = baxx[0].map((col, i) => baxx.map((row) => row[i]));
+  let transposedRates = reqRates[0].map((col, i) =>
+    reqRates.map((row) => row[i])
+  );
   let necessaryRates = [];
   // required inka göre belirlenecek
   for (let i = 0; i < uniquedArr.length; i++) {
@@ -149,7 +143,6 @@ function shop(i) {
     }
   });
   const shoppingList = millingCost(shopList);
-  console.log({ shoppingList });
   setShoppingList(shoppingList, i);
   setExpectedPigments(shopList);
   setExtraPigments(twoDArrx);
@@ -193,18 +186,15 @@ function setExpectedPigments(shopList) {
   }
 }
 
-function millingCost(shoppingList) {
+function millingCost(shopList) {
   let axx = [];
-  for (let i = 0; i < shoppingList.length; i++) {
-    const reqValue = shoppingList[i][0];
-    const herbName = itemData.find((herb) => herb.id === shoppingList[i][1])
-      .name;
-    const herbPrice = itemData.find((herb) => herb.id === shoppingList[i][1])
-      .price;
+  for (let i = 0; i < shopList.length; i++) {
+    const reqValue = shopList[i][0];
+    const herbName = itemData.find((herb) => herb.id === shopList[i][1]).name;
+    const herbPrice = itemData.find((herb) => herb.id === shopList[i][1]).price;
     const totalCostperHeb = herbPrice * reqValue;
     axx.push([herbName, reqValue, totalCostperHeb]);
   }
-
   return axx;
 }
 function setShoppingList(shopList) {
@@ -223,7 +213,6 @@ function setShoppingList(shopList) {
   }
 }
 function resetAllSections() {
-  //Reset Required Sec.
   for (let i = 0; i < requires.length; i++) {
     requires[i].value = 0;
   }
@@ -369,15 +358,16 @@ function multiplyMatrices(m1, m2) {
 }
 async function checkToken() {
   const tokenStatus = await ipcRenderer.sendSync("check-token");
-  if(tokenStatus){
+  if (tokenStatus) {
     console.log("True");
-    document.querySelector(".token-status").innerText = "Your Token Status : ✔"
-    
-  }
-  else{
+    document.querySelector(".token-status").innerText = "Your Token Status : ✔";
+  } else {
     console.log("false");
-    document.querySelector(".token-status").innerText = "Your Token Status : ❌"
-    alert("There is a problem with your token status. Please check your settings! ")
-    document.querySelector(".update-btn").disabled = true
+    document.querySelector(".token-status").innerText =
+      "Your Token Status : ❌";
+    alert(
+      "There is a problem with your token status. Please check your settings! "
+    );
+    document.querySelector(".update-btn").disabled = true;
   }
 }
