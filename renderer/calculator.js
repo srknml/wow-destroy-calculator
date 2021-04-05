@@ -143,7 +143,9 @@ function shop(i) {
     }
   });
   const shoppingList = millingCost(shopList);
-  setShoppingList(shoppingList, i);
+  console.log(shopList);
+  console.log(shoppingList);
+  setShoppingList(shoppingList);
   setExpectedPigments(shopList);
   setExtraPigments(twoDArrx);
 }
@@ -178,9 +180,9 @@ function setExpectedPigments(shopList) {
         Lumamount += item[herbID][0] * reqValue;
         Umbamount += item[herbID][1] * reqValue;
         Traamount += item[herbID][2] * reqValue;
-        expectedSec[0].innerText = Number(Lumamount.toFixed(2));
-        expectedSec[1].innerText = Number(Umbamount.toFixed(2));
-        expectedSec[2].innerText = Number(Traamount.toFixed(2));
+        expectedSec[0].innerText = fixNumber(Lumamount);
+        expectedSec[1].innerText = fixNumber(Umbamount);
+        expectedSec[2].innerText = fixNumber(Traamount);
       }
     });
   }
@@ -238,23 +240,16 @@ function setTotalCosts(t) {
     const requiredValue = requires[i].value;
 
     if (t === t2) {
-      t[i].innerText = Number(
-        (
-          (parseInt(itemData[i + 6].price * 100 + 1.5 * 100) / 100) *
-          requiredValue
-        ).toFixed(2)
+      t[i].innerText = fixNumber(
+        doMath(itemData[i + 6].price, 1.5) * requiredValue
       );
-      total += parseInt(t[i].innerText * 100) / 100;
+      total += doMath(t[i].innerText);
     } else if (t === t3) {
-      t[i].innerText = Number(
-        ((parseInt(itemData[i + 9].price * 100) / 100) * requiredValue).toFixed(
-          2
-        )
-      );
-      total += parseInt(t[i].innerText * 100) / 100;
+      t[i].innerText = fixNumber(doMath(itemData[i + 9].price) * requiredValue);
+      total += doMath(t[i].innerText);
     }
   }
-  t[3].innerText = Number(total.toFixed(2));
+  t[3].innerText = fixNumber(total);
 }
 
 function resetSections(sec) {
@@ -270,6 +265,8 @@ for (let i = 0; i < requires.length; i++) {
     shop(i);
   });
 }
+doMath = (x, y = 0) => (parseInt(x * 1000) + parseInt(y * 1000)) / 1000;
+fixNumber = (num) => Number(num.toFixed(2));
 
 function matrix_invert(M) {
   if (M.length !== M[0].length) {
@@ -359,10 +356,8 @@ function multiplyMatrices(m1, m2) {
 async function checkToken() {
   const tokenStatus = await ipcRenderer.sendSync("check-token");
   if (tokenStatus) {
-    console.log("True");
     document.querySelector(".token-status").innerText = "Your Token Status : ✔";
   } else {
-    console.log("false");
     document.querySelector(".token-status").innerText =
       "Your Token Status : ❌";
     alert(
