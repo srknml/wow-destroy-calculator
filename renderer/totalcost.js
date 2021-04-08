@@ -13,8 +13,6 @@ for (let i = 0; i < 3; i++) {
   container.id = "totalcost-" + (i + 1);
   const title = document.createElement("h4");
   title.classList.add("sub-title");
-  let titleText = document.createTextNode("titleText");
-  title.appendChild(titleText);
   container.appendChild(title);
 
   for (let j = 0; j < TOTAL_COST_SECTIONS.length; j++) {
@@ -37,3 +35,11 @@ for (let i = 0; i < 3; i++) {
 
   totalContainer.appendChild(container);
 }
+function setSubTitles() {
+  const subTitles = document.querySelectorAll(".sub-title");
+
+  subTitles[0].innerHTML = "Milling (Average)";
+  subTitles[1].innerHTML = "Pigment Purchase";
+  subTitles[2].innerHTML = "Ink Purchase";
+}
+setSubTitles();

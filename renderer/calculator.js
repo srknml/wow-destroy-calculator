@@ -210,8 +210,8 @@ function setShoppingList(shopList) {
     let reqV = shoppingList[i][1];
     let totalC = shoppingList[i][2];
     a[0].innerText = name;
-    a[1].innerText = Number(reqV.toFixed(2));
-    a[2].innerText = Number(totalC.toFixed(2));
+    a[1].innerText = fixNumber(reqV);
+    a[2].innerText = fixNumber(totalC);
   }
 }
 function resetAllSections() {
@@ -338,7 +338,6 @@ function matrix_invert(M) {
 
   return I;
 }
-
 function multiplyMatrices(m1, m2) {
   var result = [];
   for (var i = 0; i < m1.length; i++) {

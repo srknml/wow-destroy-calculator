@@ -15,7 +15,6 @@ class DataProvider {
 
   async getConnectedRealmId() {
     try {
-      let realmsTest = {};
       this.token = await this.oauthClient.getToken();
       const response = await fetch(this.CONNECTED_REALM_URL, {
         method: "GET",
@@ -36,19 +35,15 @@ class DataProvider {
         });
         const connectedRealmsData = await realmData.json();
         const realmId = connectedRealmsData.id;
-        realmsTest[realmId] = [];
         for (let j = 0; j < connectedRealmsData.realms.length; j++) {
           let currSlug = connectedRealmsData.realms[j].slug;
-          //To make this faster make this constant variable
-          realmsTest[realmId].push(currSlug);
           if (currSlug == this.user.realm) {
             return (this.realmId = realmId);
           }
         }
-        console.log(realmsTest);
       }
     } catch (error) {
-      console.log("error => " + error);
+      console.log("Error => " + error);
     }
   }
 
