@@ -1,6 +1,15 @@
 const electron = require("electron");
 const { ipcRenderer } = electron;
+createElement = (el) => {
+  const html = document.createElement(el);
+  return (classname) => {
+    html.classList.add(classname);
+    return html;
+  };
+};
 
+createTextNode = (text) => document.createTextNode(text);
+addChild = (parent, child) => parent.appendChild(child);
 const itemData = [
   { id: 169701, name: "DeathBlossom" },
   { id: 168589, name: "Marrowroot" },
@@ -22,8 +31,8 @@ const itemContainer = document.querySelectorAll(".container-item")[0];
 function handleUpdate() {
   const btn = document.querySelector("#updatePrices");
   btn.addEventListener("click", async () => {
-    await getPrices();
-    displayPrices();
+    const setandDisplayPrices = await getPrices();
+    setandDisplayPrices()();
     resetAllSections();
     calculatePigmentCostForAllHerbs();
   });
@@ -31,64 +40,54 @@ function handleUpdate() {
 
 async function getPrices() {
   const prices = await ipcRenderer.sendSync("Prices");
-  setPrices(prices);
+  return function () {
+    itemData.map((item) => {
+      if (prices[item.id] === undefined) {
+        return;
+      } else {
+        item.price = prices[item.id];
+      }
+    });
+    return function () {
+      const itemsElement = document.querySelectorAll(".items > .item-price");
+      itemData.map((item, index) => {
+        addChild(itemsElement[index], createTextNode(item.price));
+      });
+    };
+  };
 }
 
-function setPrices(prices) {
-  for (let i = 0; i < itemData.length - 2; i++) {
-    itemData[i].price = prices[itemData[i].id];
+itemData.map((item) => {
+  let items = createElement("div")("items");
+  addChild(itemContainer, items);
+
+  let itemName = createElement("div")("item-name");
+  let textNode = createTextNode(item.name);
+  addChild(itemName, textNode);
+  addChild(items, itemName);
+
+  let itemPrice = createElement("div")("item-price");
+  if (item.hasOwnProperty("price")) {
+    addChild(itemPrice, createTextNode(item.price));
   }
+  addChild(items, itemPrice);
+});
+addChild(itemContainer, createUpdateBtn());
+
+setButton = () => {
+  document.querySelector(".set-btn").addEventListener("click", () => {
+    ipcRenderer.send("set-window");
+  });
+};
+function createUpdateBtn() {
+  let btn = createElement("button")("update-Btn");
+  btn.id = "updatePrices";
+  addChild(btn, createTextNode("Update"));
+  return btn;
 }
-function displayPrices() {
-  const pricesSpans = document.querySelectorAll(".items");
-  for (let i = 0; i < itemData.length - 2; i++) {
-    if (pricesSpans[i].id == itemData[i].id) {
-      pricesSpans[i].lastElementChild.innerText = itemData[i].price;
-    }
-  }
-}
-
-//Vendorları ayrı oluştur.
-function createItemsLayout() {
-  for (let i = 0; i < itemData.length; i++) {
-    const item = document.createElement("div");
-    item.classList.add("items");
-    item.id = itemData[i].id;
-    itemContainer.appendChild(item);
-
-    let itemName = document.createElement("div");
-    itemName.classList.add("item-name");
-    itemName.id = "i-" + itemData[i].id + "n";
-    let text = document.createTextNode(itemData[i].name);
-    itemName.appendChild(text);
-    item.appendChild(itemName);
-
-    const price = document.createElement("div");
-    price.classList.add("item-price");
-    price.id = "i-" + itemData[i].id + "p";
-    if (itemData[i].hasOwnProperty("price")) {
-      price.appendChild(document.createTextNode(itemData[i].price));
-    }
-    item.appendChild(price);
-  }
-
-  createUpdateBtn();
-}
-
 async function __init__() {
-  createItemsLayout();
+  setButton();
   handleUpdate();
 }
 
 __init__();
-
-document.querySelector(".set-btn").addEventListener("click", () => {
-  ipcRenderer.send("set-window");
-});
-function createUpdateBtn() {
-  const updateBtn = document.createElement("button");
-  updateBtn.classList.add("update-btn");
-  updateBtn.id = "updatePrices";
-  updateBtn.appendChild(document.createTextNode("Update Prices"));
-  itemContainer.appendChild(updateBtn);
-}

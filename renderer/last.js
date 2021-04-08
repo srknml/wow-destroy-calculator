@@ -82,7 +82,6 @@ function createShoppingList() {
 
     shopping.appendChild(item);
   }
-  console.log(shopping);
 }
 createShoppingList();
 createExtraSection();
