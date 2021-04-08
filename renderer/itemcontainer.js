@@ -10,6 +10,15 @@ createElement = (el) => {
 
 createTextNode = (text) => document.createTextNode(text);
 addChild = (parent, child) => parent.appendChild(child);
+getElements = (selector) => {
+  let el = document.querySelectorAll(selector);
+  if (el.length === 1) {
+    return el[0];
+  } else {
+    return el;
+  }
+};
+
 const itemData = [
   { id: 169701, name: "DeathBlossom" },
   { id: 168589, name: "Marrowroot" },
@@ -26,10 +35,10 @@ const itemData = [
   { id: 1, name: "Aerated Water", price: "0.5" },
   { id: 2, name: "Rune Etched Vial", price: "1" },
 ];
+const itemContainer = getElements(".container-item")[0];
 
-const itemContainer = document.querySelectorAll(".container-item")[0];
 function handleUpdate() {
-  const btn = document.querySelector("#updatePrices");
+  const btn = getElements("#updatePrices");
   btn.addEventListener("click", async () => {
     const setandDisplayPrices = await getPrices();
     setandDisplayPrices()();
@@ -37,7 +46,6 @@ function handleUpdate() {
     calculatePigmentCostForAllHerbs();
   });
 }
-
 async function getPrices() {
   const prices = await ipcRenderer.sendSync("Prices");
   return function () {
@@ -49,45 +57,44 @@ async function getPrices() {
       }
     });
     return function () {
-      const itemsElement = document.querySelectorAll(".items > .item-price");
+      let itemsElement = getElements(".items > .item-price");
       itemData.map((item, index) => {
         addChild(itemsElement[index], createTextNode(item.price));
       });
     };
   };
 }
+createItemListLayout = () => {
+  itemData.map((item) => {
+    let items = createElement("div")("items");
+    addChild(itemContainer, items);
 
-itemData.map((item) => {
-  let items = createElement("div")("items");
-  addChild(itemContainer, items);
+    let itemName = createElement("div")("item-name");
+    let textNode = createTextNode(item.name);
+    addChild(itemName, textNode);
+    addChild(items, itemName);
 
-  let itemName = createElement("div")("item-name");
-  let textNode = createTextNode(item.name);
-  addChild(itemName, textNode);
-  addChild(items, itemName);
-
-  let itemPrice = createElement("div")("item-price");
-  if (item.hasOwnProperty("price")) {
-    addChild(itemPrice, createTextNode(item.price));
-  }
-  addChild(items, itemPrice);
-});
-addChild(itemContainer, createUpdateBtn());
-
+    let itemPrice = createElement("div")("item-price");
+    if (item.hasOwnProperty("price")) {
+      addChild(itemPrice, createTextNode(item.price));
+    }
+    addChild(items, itemPrice);
+  });
+};
 setButton = () => {
-  document.querySelector(".set-btn").addEventListener("click", () => {
+  getElements(".set-btn").addEventListener("click", () => {
     ipcRenderer.send("set-window");
   });
 };
-function createUpdateBtn() {
+createUpdateBtn = () => {
   let btn = createElement("button")("update-Btn");
   btn.id = "updatePrices";
   addChild(btn, createTextNode("Update"));
-  return btn;
-}
-async function __init__() {
+  addChild(itemContainer, btn);
+};
+(async function IIFE() {
+  createItemListLayout();
+  createUpdateBtn();
   setButton();
   handleUpdate();
-}
-
-__init__();
+})()
