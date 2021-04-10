@@ -143,8 +143,6 @@ function shop(i) {
     }
   });
   const shoppingList = millingCost(shopList);
-  console.log(shopList);
-  console.log(shoppingList);
   setShoppingList(shoppingList);
   setExpectedPigments(shopList);
   setExtraPigments(twoDArrx);

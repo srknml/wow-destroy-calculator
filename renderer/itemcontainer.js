@@ -8,7 +8,12 @@ createElement = (el) => {
     return html;
   };
 };
-
+function test(el, c, t = "") {
+  let x = document.createElement(el);
+  x.classList.add(c);
+  x.appendChild(document.createTextNode(t));
+  return x;
+}
 createTextNode = (text) => document.createTextNode(text);
 addChild = (parent, child) => parent.appendChild(child);
 getElements = (selector) => {
@@ -22,21 +27,31 @@ getElements = (selector) => {
 createItemDivIn = (parent, classname) =>
   addChild(parent, createElement("div")(classname));
 
-createItemsLayout = (container, itemList) => {
-  itemList.map((item) => {
-    let items = createItemDivIn(container, "items");
-
-    addChild(
-      createItemDivIn(items, "item-name"),
-      createTextNode(item.name === undefined ? item : item.name)
-    );
-    addChild(
-      createItemDivIn(items, "item-price"),
-      createTextNode(item.price === undefined ? "" : item.price)
-    );
+function createItem(parent, ...children) {
+  children.map((child) => {
+    parent.appendChild(child);
   });
-};
+  return parent;
+}
 
+createItemsLayout = (itemList) => {
+  let layoutItems = itemList.map((item) => {
+    let items = test("div", "items");
+    let itemName = test(
+      "div",
+      "item-name",
+      item.name === undefined ? item : item.name
+    );
+    let value = test(
+      "div",
+      "item-price",
+      item.price === undefined ? "" : item.price
+    );
+    createItem(items, itemName, value);
+    return items;
+  });
+  return layoutItems;
+};
 const itemData = [
   { id: 169701, name: "DeathBlossom" },
   { id: 168589, name: "Marrowroot" },
@@ -94,8 +109,10 @@ createUpdateBtn = () => {
   addChild(btn, createTextNode("Update"));
   addChild(itemContainer, btn);
 };
+
 (async function IIFE() {
-  createItemsLayout(itemContainer, itemData);
+  createItemsLayout(itemData);
+  createItem(itemContainer, ...createItemsLayout(itemData));
   createUpdateBtn();
   createSettingsButton();
   handleUpdate();
