@@ -249,6 +249,7 @@ function setTotalCosts(t) {
       total += doMath(t[i].innerText);
     }
   }
+  console.log(t);
   t[3].innerText = fixNumber(total);
 }
 

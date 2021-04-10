@@ -1,7 +1,12 @@
-const reqs = document.querySelector(".required-section");
-const expected = document.querySelector(".expected-pigments");
-const extra = document.querySelector(".extraneous-pigments");
-const shopping = document.querySelector(".shopping-section");
+const reqs = getElements(".required-section");
+const expected = getElements(".expected-pigments");
+const extra = getElements(".extraneous-pigments");
+const shopping = getElements(".shopping-section");
+// const s = "asd ink"
+// const n  = s.search("inks")
+// console.log(n);
+
+
 
 //#######   KOD TEKRARI ##########\\
 function createRequiredSection() {
@@ -83,6 +88,7 @@ function createShoppingList() {
     shopping.appendChild(item);
   }
 }
+
 createShoppingList();
 createExtraSection();
 createExpectedSection();
