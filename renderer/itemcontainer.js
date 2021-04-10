@@ -2,7 +2,7 @@ const electron = require("electron");
 const { ipcRenderer } = electron;
 createElement = (el) => {
   const html = document.createElement(el);
-  return (classname) => {
+  return function (classname) {
     html.classList.add(classname);
     return html;
   };
@@ -18,6 +18,23 @@ getElements = (selector) => {
     return el;
   }
 };
+createItemDivIn = (parent, classname) =>
+  addChild(parent, createElement("div")(classname));
+
+createLayout = (container, itemList) => {
+  itemList.map((item) => {
+    let items = createItemDivIn(container, "items");
+
+    addChild(
+      createItemDivIn(items, "item-name"),
+      createTextNode(item.name === undefined ? item : item.name)
+    );
+    addChild(
+      createItemDivIn(items, "item-price"),
+      createTextNode(item.price === undefined ? "" : item.price)
+    );
+  });
+};
 
 const itemData = [
   { id: 169701, name: "DeathBlossom" },
@@ -32,8 +49,8 @@ const itemData = [
   { id: 173059, name: "Luminous Ink" },
   { id: 173058, name: "Umbral Ink" },
   { id: 175970, name: "Tranquil Ink" },
-  { id: 1, name: "Aerated Water", price: "0.5" },
-  { id: 2, name: "Rune Etched Vial", price: "1" },
+  { id: 1, name: "Aerated Water", price: 0.5 },
+  { id: 2, name: "Rune Etched Vial", price: 1 },
 ];
 const itemContainer = getElements(".container-item")[0];
 
@@ -59,29 +76,23 @@ async function getPrices() {
     return function () {
       let itemsElement = getElements(".items > .item-price");
       itemData.map((item, index) => {
-        addChild(itemsElement[index], createTextNode(item.price));
+        itemsElement[index].innerText = item.price;
       });
     };
   };
 }
 createItemListLayout = () => {
   itemData.map((item) => {
-    let items = createElement("div")("items");
-    addChild(itemContainer, items);
+    let items = createItemDivIn(itemContainer, "items");
 
-    let itemName = createElement("div")("item-name");
-    let textNode = createTextNode(item.name);
-    addChild(itemName, textNode);
-    addChild(items, itemName);
-
-    let itemPrice = createElement("div")("item-price");
-    if (item.hasOwnProperty("price")) {
-      addChild(itemPrice, createTextNode(item.price));
-    }
-    addChild(items, itemPrice);
+    addChild(createItemDivIn(items, "item-name"), createTextNode(item.name));
+    addChild(
+      createItemDivIn(items, "item-price"),
+      createTextNode(item.price === undefined ? "" : item.price)
+    );
   });
 };
-setButton = () => {
+createSettingsButton = () => {
   getElements(".set-btn").addEventListener("click", () => {
     ipcRenderer.send("set-window");
   });
@@ -93,8 +104,9 @@ createUpdateBtn = () => {
   addChild(itemContainer, btn);
 };
 (async function IIFE() {
-  createItemListLayout();
+  // createItemListLayout();
+  createLayout(itemContainer, itemData);
   createUpdateBtn();
-  setButton();
+  createSettingsButton();
   handleUpdate();
-})()
+})();
