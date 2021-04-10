@@ -1,5 +1,6 @@
 const electron = require("electron");
 const { ipcRenderer } = electron;
+
 createElement = (el) => {
   const html = document.createElement(el);
   return function (classname) {
@@ -21,7 +22,7 @@ getElements = (selector) => {
 createItemDivIn = (parent, classname) =>
   addChild(parent, createElement("div")(classname));
 
-createLayout = (container, itemList) => {
+createItemsLayout = (container, itemList) => {
   itemList.map((item) => {
     let items = createItemDivIn(container, "items");
 
@@ -81,17 +82,7 @@ async function getPrices() {
     };
   };
 }
-createItemListLayout = () => {
-  itemData.map((item) => {
-    let items = createItemDivIn(itemContainer, "items");
 
-    addChild(createItemDivIn(items, "item-name"), createTextNode(item.name));
-    addChild(
-      createItemDivIn(items, "item-price"),
-      createTextNode(item.price === undefined ? "" : item.price)
-    );
-  });
-};
 createSettingsButton = () => {
   getElements(".set-btn").addEventListener("click", () => {
     ipcRenderer.send("set-window");
@@ -104,8 +95,7 @@ createUpdateBtn = () => {
   addChild(itemContainer, btn);
 };
 (async function IIFE() {
-  // createItemListLayout();
-  createLayout(itemContainer, itemData);
+  createItemsLayout(itemContainer, itemData);
   createUpdateBtn();
   createSettingsButton();
   handleUpdate();

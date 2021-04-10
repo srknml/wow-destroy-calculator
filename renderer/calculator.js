@@ -16,7 +16,7 @@ Rates.push(NightRates);
 const costsForAllPigments = [];
 function calculatePigmentCostForAllHerbs() {
   const LIST_OF_GOLD_PER_PIGMENTS = [];
-
+  console.log(itemData);
   for (let i = 0; i < 6; i++) {
     const price = itemData[i].price;
     const id = itemData[i].id;
@@ -155,10 +155,10 @@ const t1 = document.querySelectorAll("#totalcost-1 > .items > .item-price");
 const t2 = document.querySelectorAll("#totalcost-2 > .items > .item-price");
 const t3 = document.querySelectorAll("#totalcost-3 > .items > .item-price");
 const expectedSec = document.querySelectorAll(
-  ".expected-pigments > .items > .item-amount"
+  ".expected-pigments > .items > .item-price"
 );
 const extraSec = document.querySelectorAll(
-  ".extraneous-pigments > .items > .item-amount"
+  ".extraneous-pigments > .items > .item-price"
 );
 const itemSec = document.querySelectorAll(".shopping-section > .items ");
 function setExtraPigments() {
@@ -249,7 +249,7 @@ function setTotalCosts(t) {
       total += doMath(t[i].innerText);
     }
   }
-  console.log(t);
+  
   t[3].innerText = fixNumber(total);
 }
 

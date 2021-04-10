@@ -2,57 +2,36 @@ const reqs = getElements(".required-section");
 const expected = getElements(".expected-pigments");
 const extra = getElements(".extraneous-pigments");
 const shopping = getElements(".shopping-section");
-// const s = "asd ink"
-// const n  = s.search("inks")
-// console.log(n);
+
+createInputEle = (id,type,initV) => {
+ let input = createElement("input")("some-input")
+ input.id = id
+ input.type=type
+ input.value = initV
+ return input
+}
 
 
 
 //#######   KOD TEKRARI ##########\\
-function createRequiredSection() {
-  for (let i = 0; i < 3; i++) {
-    const item = document.createElement("div");
-    item.classList.add("items");
-    const itemName = document.createElement("span");
-    itemName.classList.add("item-name");
-    itemName.appendChild(document.createTextNode(itemData[i + 9].name));
-    item.appendChild(itemName);
-    item.id = "r-" + itemData[i + 9].id;
+function createRequiredSection(inkList) {
+
+console.log(inkList);
+  inkList.map((ink) => {
+    const item = createItemDivIn(reqs, "items");
+    const itemName = createItemDivIn(item, "item-name");
+    addChild(itemName, createTextNode(ink));
+  //  let input =  createInputEle(`req-${ink}`,"text","0")
+    item.id = "r-" + ink;
     const input = document.createElement("input");
     input.type = "text";
     input.value = "0";
 
     item.appendChild(input);
-    reqs.appendChild(item);
-  }
-}
-function createExpectedSection() {
-  for (let i = 0; i < 3; i++) {
-    const item = document.createElement("div");
-    item.classList.add("items");
-    const itemName = document.createElement("span");
-    itemName.classList.add("item-name");
-    itemName.appendChild(document.createTextNode(itemData[i + 6].name));
-    item.appendChild(itemName);
-    const span = document.createElement("span");
-    span.classList.add("item-amount");
-    item.appendChild(span);
-    expected.appendChild(item);
-  }
-}
-function createExtraSection() {
-  for (let i = 0; i < 3; i++) {
-    const item = document.createElement("div");
-    item.classList.add("items");
-    const itemName = document.createElement("span");
-    itemName.classList.add("item-name");
-    itemName.appendChild(document.createTextNode(itemData[i + 6].name));
-    item.appendChild(itemName);
-    const span = document.createElement("span");
-    span.classList.add("item-amount");
-    item.appendChild(span);
-    extra.appendChild(item);
-  }
+  })
+  // for (let i = 0; i < 3; i++) {
+    
+  // }
 }
 
 function createShoppingList() {
@@ -89,7 +68,8 @@ function createShoppingList() {
   }
 }
 
+createItemsLayout(extra, pigmentList);
+createItemsLayout(expected, pigmentList);
+
 createShoppingList();
-createExtraSection();
-createExpectedSection();
-createRequiredSection();
+createRequiredSection(inkList);
