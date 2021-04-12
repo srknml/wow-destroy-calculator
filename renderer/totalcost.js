@@ -1,6 +1,6 @@
 getPigmentsAndInks = (items, val) => {
   let listOf = [];
-  items.map((item) => {
+  items.map(item => {
     if (item.name.search(val) !== -1) {
       listOf = [...listOf, item.name];
     }
@@ -8,8 +8,11 @@ getPigmentsAndInks = (items, val) => {
 
   return listOf;
 };
+setText = (element, text) => {
+  return (element.innerText = text);
+};
 
-createSection = (section) => {
+createSection = section => {
   let subTitle = test("h4", "sub-title", "Test");
   let subC = test("div", "total-cost-container");
   let total = test("div", "items");
@@ -17,14 +20,9 @@ createSection = (section) => {
   let price = test("div", "item-price");
   createItem(total, name, price);
 
-  createItem(subC, subTitle);
-
-  createItem(section, subC);
-
   let items = createItemsLayout(inkList);
-  createItem(subC, ...items);
-  createItem(subC, total);
 
+  createItem(section, createItem(subC, subTitle, ...items, total));
   return subC;
 };
 
@@ -34,7 +32,11 @@ const pigmentList = getPigmentsAndInks(itemData, "Pigment");
 
 const millingContainer = createSection(totalContainer);
 const pigmentContainer = createSection(totalContainer);
+
 const InkContainer = createSection(totalContainer);
 millingContainer.id = "totalcost-1";
 pigmentContainer.id = "totalcost-2";
 InkContainer.id = "totalcost-3";
+setText(millingContainer.querySelector(".sub-title"), "Milling  (Average)");
+setText(pigmentContainer.querySelector(".sub-title"), "Pigment Purchase");
+setText(InkContainer.querySelector(".sub-title"), "Ink Purchase");

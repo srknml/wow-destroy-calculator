@@ -202,7 +202,7 @@ function setShoppingList(shopList) {
   const shoppingList = shopList;
   resetShoppingList();
   for (let i = 0; i < shoppingList.length; i++) {
-    const a = itemSec[i].querySelectorAll("span");
+    const a = itemSec[i].querySelectorAll("div");
 
     let name = shoppingList[i][0];
     let reqV = shoppingList[i][1];
@@ -226,7 +226,7 @@ function resetAllSections() {
 }
 function resetShoppingList() {
   for (let i = 0; i < 3; i++) {
-    const a = itemSec[i].querySelectorAll("span");
+    const a = itemSec[i].querySelectorAll("div");
     a[0].innerText = " ";
     a[1].innerText = " ";
     a[2].innerText = " ";

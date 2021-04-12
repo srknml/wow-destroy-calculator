@@ -11,7 +11,7 @@ const inputFunc = (createInputEle = (id = "0", type = "text", initV = "") => {
   return input;
 });
 
-function deneme(params) {
+function deneme() {
   let item = test("div", "sub-title");
   let name = test("div", "sub-title2", "Herb");
   let amount = test("div", "sub-title2", "Amount");
