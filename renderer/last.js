@@ -3,28 +3,14 @@ const expected = getElements(".expected-pigments");
 const extra = getElements(".extraneous-pigments");
 const shopping = getElements(".shopping-section");
 
-createInputEle = (id, type, initV) => {
+const inputFunc = createInputEle = (id="0", type= "text", initV="") => {
   let input = createElement("input")("some-input");
   input.id = id;
   input.type = type;
   input.value = initV;
   return input;
 };
-
 //#######   KOD TEKRARI ##########\\
-function createRequiredSection(section, inkList) {
-  // createItem(reqs,...createItemsLayout(inkList))
-
-  inkList.map((ink) => {
-    const item = createItemDivIn(section, "items");
-    const itemName = createItemDivIn(item, "item-name");
-    addChild(itemName, createTextNode(ink));
-    let input = createInputEle("0", "text", "0");
-
-    item.appendChild(input);
-  });
-}
-
 function createShoppingList() {
   const itema = document.createElement("div");
   itema.classList.add("itemss");
@@ -57,15 +43,17 @@ function createShoppingList() {
 
     shopping.appendChild(item);
   }
+
 }
+
 
 createItem(expected, ...createItemsLayout(pigmentList));
 createItem(extra, ...createItemsLayout(pigmentList));
-
+createItem(reqs, ...createItemsLayout(inkList,inputFunc))
 // TODO
 /**
  * CreateItemsLayout fonksiyonuna extra argüman yollayarak input ve ya Shopping List için Gerekenleri yaptırabiliriz
- *
+ * total titles
  */
 createShoppingList();
-createRequiredSection(reqs, inkList);
+// createRequiredSection(reqs, inkList);

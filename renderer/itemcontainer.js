@@ -1,7 +1,7 @@
 const electron = require("electron");
 const { ipcRenderer } = electron;
 
-createElement = (el) => {
+createElement = el => {
   const html = document.createElement(el);
   return function (classname) {
     html.classList.add(classname);
@@ -14,9 +14,9 @@ function test(el, c, t = "") {
   x.appendChild(document.createTextNode(t));
   return x;
 }
-createTextNode = (text) => document.createTextNode(text);
+createTextNode = text => document.createTextNode(text);
 addChild = (parent, child) => parent.appendChild(child);
-getElements = (selector) => {
+getElements = selector => {
   let el = document.querySelectorAll(selector);
   if (el.length === 1) {
     return el[0];
@@ -28,28 +28,31 @@ createItemDivIn = (parent, classname) =>
   addChild(parent, createElement("div")(classname));
 
 function createItem(parent, ...children) {
-  children.map((child) => {
+  children.map(child => {
     parent.appendChild(child);
   });
   return parent;
 }
 
-createItemsLayout = (itemList) => {
-  let layoutItems = itemList.map((item) => {
+createItemsLayout = (itemList, option) => {
+  
+  let layoutItems = itemList.map(item => {
     let items = test("div", "items");
     let itemName = test(
       "div",
       "item-name",
       item.name === undefined ? item : item.name
     );
-    let value = test(
+    let value;
+    value = test(
       "div",
       "item-price",
       item.price === undefined ? "" : item.price
     );
-    createItem(items, itemName, value);
+    createItem(items, itemName, option === undefined ? value : option());
     return items;
   });
+  // console.log(layoutItems);
   return layoutItems;
 };
 const itemData = [
@@ -81,15 +84,15 @@ function handleUpdate() {
 }
 async function getPrices() {
   const prices = await ipcRenderer.sendSync("Prices");
-  return function () {
-    itemData.map((item) => {
+  return function setPrices() {
+    itemData.map(item => {
       if (prices[item.id] === undefined) {
         return;
       } else {
         item.price = prices[item.id];
       }
     });
-    return function () {
+    return function displayPrices() {
       let itemsElement = getElements(".items > .item-price");
       itemData.map((item, index) => {
         itemsElement[index].innerText = item.price;
