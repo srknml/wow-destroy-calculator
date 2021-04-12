@@ -35,7 +35,7 @@ function createItem(parent, ...children) {
 }
 
 createItemsLayout = (itemList, option) => {
-  
+
   let layoutItems = itemList.map(item => {
     let items = test("div", "items");
     let itemName = test(

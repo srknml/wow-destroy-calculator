@@ -60,7 +60,8 @@
   -ms-flex-direction: column;
   flex-direction: column;
   max-width: 300px;
-
+  /* height: auto;
+  overflow: hidden; */
   justify-content: space-between;
   border-right: 1px solid #4d381a;
   padding-right: 1px;
@@ -71,8 +72,10 @@
   text-align: center;
   color: peru;
   background-color: #2c3036;
+  /* height: auto;
+  overflow: hidden; */
 }
-.items,.itemss {
+.items {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -97,6 +100,7 @@
   min-width: 135px;
   margin-left: 6px;
   padding: 3px 1px;
+  min-height: 18px;
   background-color: #ee9817;
   color: black;
 }
@@ -116,11 +120,44 @@ input {
   padding: 5px;
   flex-grow: 1;
   font-size: 16px;
+  font-weight: 600;
+  flex-grow: 3;
+  min-height: 18px;
+  /* max-width: 135px;
+  min-width: 135px; */
+  margin-left: 6px;
+  padding: 3px 1px;
 }
 .sub-title {
+  margin: 2px 0;
+  padding: 2px 0;
   text-align: center;
   color: rgb(255, 255, 255);
   background-color: #171b1b;
+  display: flex;
+  flex: 1 0 auto;
+
+  align-items: center;
+  flex-flow: row;
+  justify-content: space-evenly;
+  flex: 1 0 auto;
+}
+.sub-title2 {
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  -webkit-align-self: auto;
+  -ms-flex-item-align: auto;
+  align-self: auto;
+  
+}
+.sub-title2:first-child{
+  -webkit-flex: 2 0 auto;
+    -ms-flex: 2 0 auto;
+    flex: 2 0 auto;
 }
 button {
   height: 20px;
