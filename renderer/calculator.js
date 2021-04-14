@@ -31,55 +31,31 @@ function calculatePigmentCostForAllHerbs() {
 
     LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
   }
-  // console.log(LIST_OF_GOLD_PER_PIGMENTS);
-  //************************************* */
-  // for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
-  //   const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
-  //   const obj = { id: itemData[i].id };
-  //   obj[0] = pigment[0];
-  //   obj[1] = pigment[1];
-  //   obj[2] = pigment[2];
-  //   costsForAllPigments.push(obj);
-  // }
-  // console.log(costsForAllPigments);
-  test2();
 }
 function test2() {
- 
-
-  let minCostPerPigment = [[], [], []];
+  let minCostsPerPigment = [[], [], []];
+  console.log(LIST_OF_GOLD_PER_PIGMENTS);
   LIST_OF_GOLD_PER_PIGMENTS.map(item => {
     item.r.map((gold, i) => {
-      
-      minCostPerPigment[i].push(gold);
+      minCostsPerPigment[i].push(gold);
     });
   });
-  minCostPerPigment = minCostPerPigment.map((asd) =>
-    asd.reduce((prev, curr) => (prev = prev < curr ? prev : curr))
-  );
 
-  console.log(minCostPerPigment);
+  minCostsPerPigment = minCostsPerPigment.map(herb =>
+    herb.reduce((prev, curr) => (prev = prev < curr ? prev : curr))
+  );
+  let bestPricesWithId = [];
+  for (let i = 0; i < minCostsPerPigment.length; i++) {
+    LIST_OF_GOLD_PER_PIGMENTS.map(item => {
+      if (item.r[i] === minCostsPerPigment[i]) {
+        let obj = { id: item.id, minPer: minCostsPerPigment[i] };
+        bestPricesWithId.push(obj);
+      }
+    });
+  }
+  return bestPricesWithId;
 }
 
-function findMinCost() {
-  // test2()
-  let minCostsPerPigment = [];
-  let minCostForLum = costsForAllPigments.reduce((prev, curr) =>
-    prev[0] < curr[0] ? prev : curr
-  );
-  let minCostForUmb = costsForAllPigments.reduce((prev, curr) =>
-    prev[1] < curr[1] ? prev : curr
-  );
-  let minCostForTra = costsForAllPigments.reduce((prev, curr) =>
-    prev[2] < curr[2] ? prev : curr
-  );
-  console.log(minCostForLum);
-  minCostsPerPigment.push(minCostForLum);
-  minCostsPerPigment.push(minCostForUmb);
-  minCostsPerPigment.push(minCostForTra);
-  // console.log(minCostsPerPigment);
-  return minCostsPerPigment;
-}
 
 const requires = document.querySelectorAll(
   ".required-section > .items > input "
@@ -92,7 +68,8 @@ const shoppingSec = document.querySelectorAll(
 const twoDArrx = {};
 
 function shop(i) {
-  const currents = findMinCost();
+  const currents = test2();
+
   const requiredValue = requires[i].value;
   const herbID = itemData.find(herb => herb.id === currents[i].id).id;
   const amountOfHerb =
