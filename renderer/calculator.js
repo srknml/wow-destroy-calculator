@@ -14,34 +14,55 @@ Rates.push(WidowRates);
 Rates.push(NightRates);
 
 const costsForAllPigments = [];
+const LIST_OF_GOLD_PER_PIGMENTS = [];
 function calculatePigmentCostForAllHerbs() {
-  const LIST_OF_GOLD_PER_PIGMENTS = [];
-  console.log(itemData);
+  // const LIST_OF_GOLD_PER_PIGMENTS = [];
   for (let i = 0; i < 6; i++) {
     const price = itemData[i].price;
     const id = itemData[i].id;
     const Herb = {};
-    Herb[id] = [];
+    Herb.id = id;
+    Herb.r = [];
     for (let j = 0; j < 3; j++) {
       const rate = Rates[i][id][j];
       const GoldPigment = (1 / rate) * price;
-      Herb[id].push(GoldPigment);
+      Herb.r.push(GoldPigment);
     }
 
     LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
   }
+  // console.log(LIST_OF_GOLD_PER_PIGMENTS);
   //************************************* */
-  for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
-    const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
-    const obj = { id: itemData[i].id };
-    obj[0] = pigment[0];
-    obj[1] = pigment[1];
-    obj[2] = pigment[2];
-    costsForAllPigments.push(obj);
-  }
+  // for (let i = 0; i < LIST_OF_GOLD_PER_PIGMENTS.length; i++) {
+  //   const pigment = LIST_OF_GOLD_PER_PIGMENTS[i][itemData[i].id];
+  //   const obj = { id: itemData[i].id };
+  //   obj[0] = pigment[0];
+  //   obj[1] = pigment[1];
+  //   obj[2] = pigment[2];
+  //   costsForAllPigments.push(obj);
+  // }
+  // console.log(costsForAllPigments);
+  test2();
+}
+function test2() {
+ 
+
+  let minCostPerPigment = [[], [], []];
+  LIST_OF_GOLD_PER_PIGMENTS.map(item => {
+    item.r.map((gold, i) => {
+      
+      minCostPerPigment[i].push(gold);
+    });
+  });
+  minCostPerPigment = minCostPerPigment.map((asd) =>
+    asd.reduce((prev, curr) => (prev = prev < curr ? prev : curr))
+  );
+
+  console.log(minCostPerPigment);
 }
 
 function findMinCost() {
+  // test2()
   let minCostsPerPigment = [];
   let minCostForLum = costsForAllPigments.reduce((prev, curr) =>
     prev[0] < curr[0] ? prev : curr
@@ -52,11 +73,11 @@ function findMinCost() {
   let minCostForTra = costsForAllPigments.reduce((prev, curr) =>
     prev[2] < curr[2] ? prev : curr
   );
-
+  console.log(minCostForLum);
   minCostsPerPigment.push(minCostForLum);
   minCostsPerPigment.push(minCostForUmb);
   minCostsPerPigment.push(minCostForTra);
-
+  // console.log(minCostsPerPigment);
   return minCostsPerPigment;
 }
 
@@ -73,13 +94,12 @@ const twoDArrx = {};
 function shop(i) {
   const currents = findMinCost();
   const requiredValue = requires[i].value;
-  const herbID = itemData.find((herb) => herb.id === currents[i].id).id;
+  const herbID = itemData.find(herb => herb.id === currents[i].id).id;
   const amountOfHerb =
-    (currents[i][i] /
-      itemData.find((herb) => herb.id === currents[i].id).price) *
+    (currents[i][i] / itemData.find(herb => herb.id === currents[i].id).price) *
     requiredValue;
   const totalAmount =
-    amountOfHerb * itemData.find((herb) => herb.id === currents[i].id).price;
+    amountOfHerb * itemData.find(herb => herb.id === currents[i].id).price;
 
   twoDArrx[i] = {
     herbID,
@@ -97,7 +117,7 @@ function shop(i) {
   });
   // Duplicate Aranacak
   var uniquedArr = x.reduce((unique, o) => {
-    if (!unique.some((obj) => obj[1].herbID === o[1].herbID)) {
+    if (!unique.some(obj => obj[1].herbID === o[1].herbID)) {
       unique.push(o);
     }
     return unique;
@@ -111,7 +131,7 @@ function shop(i) {
   let reqRates = [];
   for (let i = 0; i < uniquedArr.length; i++) {
     const herbID = uniquedArr[i][1].herbID;
-    Rates.forEach((item) => {
+    Rates.forEach(item => {
       if (item[herbID] !== undefined) {
         reqRates.push(Object.values(item[herbID]));
       }
@@ -122,7 +142,7 @@ function shop(i) {
 
   // Ratesleri Transpose Et
   let transposedRates = reqRates[0].map((col, i) =>
-    reqRates.map((row) => row[i])
+    reqRates.map(row => row[i])
   );
   let necessaryRates = [];
   // required inka göre belirlenecek
@@ -173,14 +193,14 @@ function setExpectedPigments(shopList) {
     const herbID = shopList[i][1];
     const reqValue = shopList[i][0];
 
-    Rates.forEach((item) => {
+    Rates.forEach(item => {
       if (item[herbID] !== undefined) {
         Lumamount += item[herbID][0] * reqValue;
         Umbamount += item[herbID][1] * reqValue;
         Traamount += item[herbID][2] * reqValue;
-        expectedSec[0].innerText = fixNumber(Lumamount);
-        expectedSec[1].innerText = fixNumber(Umbamount);
-        expectedSec[2].innerText = fixNumber(Traamount);
+        setText(expectedSec[0], fixNumber(Lumamount));
+        setText(expectedSec[1], fixNumber(Umbamount));
+        setText(expectedSec[2], fixNumber(Traamount));
       }
     });
   }
@@ -190,8 +210,8 @@ function millingCost(shopList) {
   let axx = [];
   for (let i = 0; i < shopList.length; i++) {
     const reqValue = shopList[i][0];
-    const herbName = itemData.find((herb) => herb.id === shopList[i][1]).name;
-    const herbPrice = itemData.find((herb) => herb.id === shopList[i][1]).price;
+    const herbName = itemData.find(herb => herb.id === shopList[i][1]).name;
+    const herbPrice = itemData.find(herb => herb.id === shopList[i][1]).price;
     const totalCostperHeb = herbPrice * reqValue;
     axx.push([herbName, reqValue, totalCostperHeb]);
   }
@@ -226,10 +246,10 @@ function resetAllSections() {
 }
 function resetShoppingList() {
   for (let i = 0; i < 3; i++) {
-    const a = itemSec[i].querySelectorAll("div");
-    a[0].innerText = " ";
-    a[1].innerText = " ";
-    a[2].innerText = " ";
+    const ele = itemSec[i].querySelectorAll("div");
+    for (let j = 0; j < ele.length; j++) {
+      setText(ele[j], " ");
+    }
   }
 }
 function setTotalCosts(t) {
@@ -238,22 +258,22 @@ function setTotalCosts(t) {
     const requiredValue = requires[i].value;
 
     if (t === t2) {
-      t[i].innerText = fixNumber(
-        doMath(itemData[i + 6].price, 1.5) * requiredValue
+      setText(
+        t[i],
+        fixNumber(doMath(itemData[i + 6].price, 1.5) * requiredValue)
       );
       total += doMath(t[i].innerText);
     } else if (t === t3) {
-      t[i].innerText = fixNumber(doMath(itemData[i + 9].price) * requiredValue);
+      setText(t[i], fixNumber(doMath(itemData[i + 9].price) * requiredValue));
       total += doMath(t[i].innerText);
     }
   }
-  
-  t[3].innerText = fixNumber(total);
+  setText(t[3], fixNumber(total));
 }
 
 function resetSections(sec) {
   for (let i = 0; i < sec.length; i++) {
-    sec[i].innerText = 0;
+    setText(sec[i], 0);
   }
 }
 
@@ -265,7 +285,7 @@ for (let i = 0; i < requires.length; i++) {
   });
 }
 doMath = (x, y = 0) => (parseInt(x * 1000) + parseInt(y * 1000)) / 1000;
-fixNumber = (num) => Number(num.toFixed(2));
+fixNumber = num => Number(num.toFixed(2));
 
 function matrix_invert(M) {
   if (M.length !== M[0].length) {

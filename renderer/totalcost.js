@@ -9,7 +9,8 @@ getPigmentsAndInks = (items, val) => {
   return listOf;
 };
 setText = (element, text) => {
-  return (element.innerText = text);
+  element.innerText = text
+  return element;
 };
 
 createSection = section => {
