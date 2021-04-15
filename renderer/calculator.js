@@ -16,7 +16,6 @@ Rates.push(NightRates);
 const costsForAllPigments = [];
 const LIST_OF_GOLD_PER_PIGMENTS = [];
 function calculatePigmentCostForAllHerbs() {
-  // const LIST_OF_GOLD_PER_PIGMENTS = [];
   for (let i = 0; i < 6; i++) {
     const price = itemData[i].price;
     const id = itemData[i].id;
@@ -32,7 +31,7 @@ function calculatePigmentCostForAllHerbs() {
     LIST_OF_GOLD_PER_PIGMENTS.push(Herb);
   }
 }
-function test2() {
+function getMinPricesforPigments() {
   let minCostsPerPigment = [[], [], []];
   console.log(LIST_OF_GOLD_PER_PIGMENTS);
   LIST_OF_GOLD_PER_PIGMENTS.map(item => {
@@ -56,7 +55,6 @@ function test2() {
   return bestPricesWithId;
 }
 
-
 const requires = document.querySelectorAll(
   ".required-section > .items > input "
 );
@@ -68,7 +66,7 @@ const shoppingSec = document.querySelectorAll(
 const twoDArrx = {};
 
 function shop(i) {
-  const currents = test2();
+  const currents = getMinPricesforPigments();
 
   const requiredValue = requires[i].value;
   const herbID = itemData.find(herb => herb.id === currents[i].id).id;
@@ -84,16 +82,17 @@ function shop(i) {
     amountOfHerb,
     totalAmount,
   };
-  let x = [];
+  let shopListtt = [];
   for (var item in twoDArrx) {
-    x.push([item, twoDArrx[item]]);
+    shopListtt.push([item, twoDArrx[item]]);
   }
   //2D arrayi totalAmount'a göre sırala
-  x.sort(function (a, b) {
+  shopListtt.sort(function (a, b) {
     return b[1].amountOfHerb - a[1].amountOfHerb;
   });
+
   // Duplicate Aranacak
-  var uniquedArr = x.reduce((unique, o) => {
+  uniquedArr = shopListtt.reduce((unique, o) => {
     if (!unique.some(obj => obj[1].herbID === o[1].herbID)) {
       unique.push(o);
     }
@@ -229,23 +228,17 @@ function resetShoppingList() {
     }
   }
 }
-function setTotalCosts(t) {
-  let total = 0;
-  for (let i = 0; i < t.length - 1; i++) {
-    const requiredValue = requires[i].value;
 
-    if (t === t2) {
-      setText(
-        t[i],
-        fixNumber(doMath(itemData[i + 6].price, 1.5) * requiredValue)
-      );
-      total += doMath(t[i].innerText);
-    } else if (t === t3) {
-      setText(t[i], fixNumber(doMath(itemData[i + 9].price) * requiredValue));
-      total += doMath(t[i].innerText);
-    }
+function setTotalCosts(sec, val) {
+  let total = 0;
+  let items = getPigmentsAndInks(itemData, val);
+  for (let i = 0; i < sec.length - 1; i++) {
+    let cost = itemData.find(a => a.name === items[i]).price;
+    const requiredValue = requires[i].value;
+    setText(sec[i], fixNumber(doMath(cost, 1.5) * requiredValue));
+    total += doMath(sec[i].innerText);
   }
-  setText(t[3], fixNumber(total));
+  setText(sec[3], fixNumber(total));
 }
 
 function resetSections(sec) {
@@ -256,8 +249,8 @@ function resetSections(sec) {
 
 for (let i = 0; i < requires.length; i++) {
   requires[i].addEventListener("change", () => {
-    setTotalCosts(t2);
-    setTotalCosts(t3);
+    setTotalCosts(t2, "Pigment");
+    setTotalCosts(t3, "Ink");
     shop(i);
   });
 }
