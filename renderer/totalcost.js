@@ -33,8 +33,8 @@ const pigmentList = getPigmentsAndInks(itemData, "Pigment");
 
 const millingContainer = createSection(totalContainer);
 const pigmentContainer = createSection(totalContainer);
-
 const InkContainer = createSection(totalContainer);
+
 millingContainer.id = "totalcost-1";
 pigmentContainer.id = "totalcost-2";
 InkContainer.id = "totalcost-3";
